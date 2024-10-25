@@ -55,7 +55,6 @@ export default function Navbar() {
             <nav className="flex items-center justify-between p-4 border-b">
                 <div className="flex items-center space-x-2">
                     <div className="bg-purple-600 text-white p-2 rounded">
-                        <i className="fas fa-star"></i>
                     </div>
                     <span onClick={() => { navigate("/") }} className="cursor-pointer text-xl font-bold">
                         EduFlow
@@ -78,7 +77,7 @@ export default function Navbar() {
                             </button>
 
                             {showDropdown && (
-                                <div ref={dropdownRef} style={{ "marginTop": "14rem" }} className='absolute right-0 mt-40 w-48 bg-white border rounded shadow-lg'>
+                                <div ref={dropdownRef} style={{ "marginTop": "9.6rem" }} className='absolute right-0 mt-40 w-48 bg-white border rounded shadow-lg'>
                                     <button
                                         className='block w-full text-left px-4 py-2 hover:bg-gray-200'
                                         onClick={() => navigate("/signup/professor")}>
@@ -86,18 +85,8 @@ export default function Navbar() {
                                     </button>
                                     <button
                                         className='block w-full text-left px-4 py-2 hover:bg-gray-200'
-                                        onClick={() => navigate("/signup/guestProfessor")}>
-                                        Guest Professor
-                                    </button>
-                                    <button
-                                        className='block w-full text-left px-4 py-2 hover:bg-gray-200'
                                         onClick={() => navigate("/signup/student")}>
                                         Student
-                                    </button>
-                                    <button
-                                        className='block w-full text-left px-4 py-2 hover:bg-gray-200'
-                                        onClick={() => navigate("/signup/guestStudent")}>
-                                        Guest Student
                                     </button>
                                 </div>
                             )}

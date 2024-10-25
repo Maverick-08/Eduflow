@@ -13,7 +13,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            let response = await axios.post(`${backEndLink}/login`, {
+            let response = await axios.post(`${backEndLink}/auth`, {
                 email, password
             }, {
                 withCredentials: true,

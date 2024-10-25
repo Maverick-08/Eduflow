@@ -5,8 +5,8 @@ import links from "../../connect";
 
 const Professor = () => {
     const { backEndLink } = links;
-    
-    // Add states for new fields
+
+    // States for form fields
     const [email, setEmail] = useState('');
     const [userName, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -15,7 +15,8 @@ const Professor = () => {
     const [gender, setGender] = useState('');
     const [mobile, setMobile] = useState('');
     const [userType, setUserType] = useState("Professor");
-    const [experienceLevel, setExperienceLevel] = useState('');  // New state for experience level
+    const [experienceLevel, setExperienceLevel] = useState(''); // New state for experience level
+    const [regularOrGuest, setRegularOrGuest] = useState('');   // New state for regular or guest
 
     const navigate = useNavigate();
 
@@ -24,7 +25,7 @@ const Professor = () => {
         try {
             // Make the request with the new fields
             let response = await axios.post(`${backEndLink}/signup`, {
-                email, password, fname, lastname, gender, mobile, userType, experienceLevel  // Added experienceLevel
+                email, password, fname, lastname, gender, mobile, userType, experienceLevel, regularOrGuest  // Added regularOrGuest
             }, { withCredentials: true });
 
             console.log("response is :: ", response);
@@ -33,7 +34,7 @@ const Professor = () => {
         catch (error) {
             console.log("error", error);
         }
-        console.log({ email, password, fname, lastname, gender, mobile, userType, experienceLevel });
+        console.log({ email, password, fname, lastname, gender, mobile, userType, experienceLevel, regularOrGuest });
     };
 
     return (
@@ -125,6 +126,21 @@ const Professor = () => {
                         <option value="Assistant Professor">Assistant Professor</option>
                         <option value="PhD">PhD</option>
                         <option value="Professor">Professor</option>
+                    </select>
+                </div>
+
+                {/* Regular or Guest Dropdown */}
+                <div className="mb-4">
+                    <label className="block text-gray-700">User Type</label>
+                    <select
+                        value={regularOrGuest}
+                        onChange={(e) => setRegularOrGuest(e.target.value)}
+                        required
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                    >
+                        <option value="">Select User Type</option>
+                        <option value="Regular">Faculty Member</option>
+                        <option value="Guest">Guest Lecturer</option>
                     </select>
                 </div>
 

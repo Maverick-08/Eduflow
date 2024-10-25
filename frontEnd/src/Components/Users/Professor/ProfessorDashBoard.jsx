@@ -9,11 +9,28 @@ export default function ProfessorDashBoard() {
         { title: "Data Mining 2023", year: "", teacher: "", image: "https://placehold.co/100x100", bgColor: "bg-purple-600" },
         { title: "Data Mining 2023", year: "", teacher: "", image: "https://placehold.co/100x100", bgColor: "bg-purple-600" },
     ];
+
+    const handleAddClass = () => {
+        console.log("adding class");
+    }
     return (
         <>
-            <main className="flex-1 p-6" style={{height : "100vh"}}>
-                <header className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-semibold">Classes</h1>
+            <main className="flex-1 p-6" style={{ height: "100vh" }}>
+                <header className="flex items-center justify-start mb-6">
+                    <h1 className="text-2xl font-semibold mr-6">Classes</h1>
+                    <h1
+                        onClick={handleAddClass}
+                        style={{
+                            "border": "2px solid black",
+                            borderRadius: "100px",
+                            padding: "0px 10px 4px 10px",
+                            cursor: "pointer"
+                        }}
+                        className="text-2xl font-semibold"
+                    >
+                        +
+                    </h1>
+
                 </header>
                 <div className="grid grid-cols-3 gap-6">
                     {courses.map((course, index) => (
