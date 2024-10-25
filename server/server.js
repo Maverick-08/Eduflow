@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import Auth from './routes/auth.js';
+import Register from './routes/register.js';
 
 const app = express();
 
@@ -15,6 +16,8 @@ app.get("/test",(req,res)=>{
 })
 
 app.use("/auth", Auth);
+
+app.use("/register", Register);
 
 app.listen(3000,()=>{
     console.log("Server is running");
