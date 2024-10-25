@@ -55,7 +55,7 @@ export const registrationHandler = async (req,res) => {
         if(payload.user_type == "Guest Lecturer"){
 
             // validate email
-            const isGuestLecturerEmailValid = payload.email.indexOf("@stu.manit.ac.in") == -1 ? false : true;
+            const isGuestLecturerEmailValid = payload.email.indexOf("@prof.manit.ac.in") == -1 ? false : true;
 
             if(!isGuestLecturerEmailValid){
                 return res.status(responseCode.forbidden).json({msg:"Unauthorized"})
@@ -93,12 +93,12 @@ export const registrationHandler = async (req,res) => {
 
         // Insert data of Guest Lecturer
         if(payload.user_type == "Guest Lecturer"){
-            await Client.query('INSERT INTO professor(fname, lname, gender, email, user_password, user_type, experience_level, department) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',[payload.fname, payload.lname, payload.gender, payload.email, encryptedPassword, payload.user_type, null, payload.department])
+            await Client.query('INSERT INTO professor(fname, lname, gender, email, user_password, user_type, experience_level, department) VALUES($1, $2, $3, $4, $5, $6, $7, $8)',[payload.fname, payload.lname, payload.gender, payload.email, encryptedPassword, payload.user_type, payload.experience_level, payload.department])
 
             return res.json({msg:"Registered"});
         }
 
-        return ;
+        return res.status(responseCode.badRequest).json({msg:"Invalid user type"});
     }
     catch(err){
         console.log("@registrationHandler : \n" + err);
