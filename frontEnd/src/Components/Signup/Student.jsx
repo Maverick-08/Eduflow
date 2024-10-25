@@ -5,28 +5,29 @@ import links from "../../connect";
 
 const Student = () => {
     const { backEndLink } = links;
-    
-    // Add states for new fields
+
+    // Update state to match backend schema
+    const [user_type, setRegularOrGuest ] = useState(''); // Updated default to "Regular Student"
+    const [fname, setFname] = useState('');
+    const [lname, setLname] = useState(''); // Renamed to match backend's "lname"
+    const [gender, setGender] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [fname, setFname] = useState('');
-    const [lastname, setLastname] = useState('');
-    const [gender, setGender] = useState('');
-    const [mobile, setMobile] = useState('');
-    const [userType, setUserType] = useState('student');
+    const [scholar_id, setScholarId] = useState(''); // Renamed to match backend's "scholar_id"
     const [department, setDepartment] = useState('');
-    const [course, setCourse] = useState('');        
-    const [scholarId, setScholarId] = useState('');  
-    const [year, setYear] = useState('');            
+    const [enrolled_course, setEnrolledCourse] = useState(''); // Renamed to match backend's "enrolled_course"
+    const [current_year, setCurrentYear] = useState(''); // Renamed to match backend's "current_year"
 
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("op :: " , user_type, fname, lname, gender, email, password, scholar_id, department, enrolled_course, current_year)
         try {
-            // Make the request with the new fields
-            let response = await axios.post(`${backEndLink}/signup`, {
-                email, password, fname, lastname, gender, mobile, userType, department, course, scholarId, year // Added new fields
+            // Use updated field names to match backend schema
+            console.log("in try catch")
+            let response = await axios.post(`${backEndLink}/register`, {
+                user_type, fname, lname, gender, email, password, scholar_id, department, enrolled_course, current_year
             }, { withCredentials: true });
 
             console.log("response is :: ", response);
@@ -35,7 +36,6 @@ const Student = () => {
         catch (error) {
             console.log("error", error);
         }
-        console.log({ email, password, fname, lastname, gender, mobile, userType, department, course, scholarId, year });
     };
 
     return (
@@ -58,8 +58,8 @@ const Student = () => {
                     <label className="block text-gray-700">Last Name</label>
                     <input
                         type="text"
-                        value={lastname}
-                        onChange={(e) => setLastname(e.target.value)}
+                        value={lname}
+                        onChange={(e) => setLname(e.target.value)}
                         required
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
                     />
@@ -74,21 +74,10 @@ const Student = () => {
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
                     >
                         <option value="">Select Gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
                     </select>
-                </div>
-
-                <div className="mb-4">
-                    <label className="block text-gray-700">Mobile</label>
-                    <input
-                        type="text"
-                        value={mobile}
-                        onChange={(e) => setMobile(e.target.value)}
-                        required
-                        className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                    />
                 </div>
 
                 <div className="mb-4">
@@ -113,7 +102,6 @@ const Student = () => {
                     />
                 </div>
 
-                {/* New fields for Department, Course, Scholar ID, and Year */}
                 <div className="mb-4">
                     <label className="block text-gray-700">Department</label>
                     <input
@@ -126,11 +114,11 @@ const Student = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700">Course</label>
+                    <label className="block text-gray-700">Enrolled Course</label>
                     <input
                         type="text"
-                        value={course}
-                        onChange={(e) => setCourse(e.target.value)}
+                        value={enrolled_course}
+                        onChange={(e) => setEnrolledCourse(e.target.value)}
                         required
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
                     />
@@ -140,7 +128,7 @@ const Student = () => {
                     <label className="block text-gray-700">Scholar ID</label>
                     <input
                         type="text"
-                        value={scholarId}
+                        value={scholar_id}
                         onChange={(e) => setScholarId(e.target.value)}
                         required
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
@@ -148,11 +136,27 @@ const Student = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700">Year</label>
+                    <label className="block text-gray-700">Are you a Regular or Guest?</label>
+                    <select
+                        value={user_type}
+                        onChange={(e) => setRegularOrGuest(e.target.value)}
+                        required
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                    >
+                        <option value="">Select Option</option>
+                        <option value="Regular Student">Regular Student</option>
+                        <option value="Guest Student">Guest Student</option>
+                    </select>
+                </div>
+
+                
+
+                <div className="mb-4">
+                    <label className="block text-gray-700">Current Year</label>
                     <input
                         type="number"
-                        value={year}
-                        onChange={(e) => setYear(e.target.value)}
+                        value={current_year}
+                        onChange={(e) => setCurrentYear(e.target.value)}
                         required
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
                     />
