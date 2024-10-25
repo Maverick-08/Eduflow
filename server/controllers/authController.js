@@ -10,9 +10,11 @@ export const authHandler = async (req, res) => {
         const payload = req.body;
 
         // Data validation
-        if (!payload.email || !payload.password || !payload.user_type) {
-            return res.status(responseCode.badRequest).json({ msg: "Missing email, password or user_type" });
+        if (!payload.email || !payload.password ) {
+            return res.status(responseCode.badRequest).json({ msg: "Missing email or password !" });
         }
+
+        const isEmailvalid = payload.email.indexOf("@stu.manit.ac.in") != -1 && payload.email.indexOf("@prof.manit.ac.in") != -1 
 
         let userExists;
         // Check if the user exists in the student database 

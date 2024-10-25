@@ -98,7 +98,7 @@ export const registrationHandler = async (req,res) => {
             return res.json({msg:"Registered"});
         }
 
-        return ;
+        return res.status(responseCode.badRequest).json({msg:"Invalid user type"});
     }
     catch(err){
         console.log("@registrationHandler : \n" + err);
