@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import Auth from './routes/auth.js';
 import Register from './routes/register.js';
+import Logout from './routes/logout.js';
 import createClassroom from './routes/createClassroom.js';
 
 const app = express();
@@ -22,6 +23,8 @@ app.get("/test",(req,res)=>{
 app.use("/auth", Auth);
 
 app.use("/register", Register);
+
+app.use("/logout", Logout);
 
 app.use('/createClassroom',createClassroom)
 

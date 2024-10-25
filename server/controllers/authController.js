@@ -50,6 +50,7 @@ export const authHandler = async (req, res) => {
         const token = jwt.sign(
             {
             username: user.fname +" "+user.lname,
+            email: user.email,
             createdAt: user.created_at
             },
             process.env.TOKEN_SECRET_KEY,
