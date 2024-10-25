@@ -37,7 +37,7 @@ export default function StudentDashBoard() {
                                     <p className="text-sm">{course.teacher}</p>
                                 </div>
                                 <div className="flex justify-between p-4 border-t">
-                                    <i class="fa-regular fa-clipboard"></i>
+                                    <i className="fa-regular fa-clipboard"></i>
                                 </div>
                             </div>
                         ))}
