@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import connectJs from "../../connect";
 import axios from "axios";
+import {useSetRecoilState} from 'recoil';
+import {userAtom} from '../../state/user';
 
 const Login = () => {
 
     const { backEndLink } = connectJs;
+    const setUserAtom = useSetRecoilState(userAtom);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -18,14 +21,13 @@ const Login = () => {
             }, {
                 withCredentials: true,
             })
-            localStorage.setItem("currentUser" , email);
-            console.log(response);
+            setUserAtom({...response.data,isAuthenticated:true});
             navigate("/");
         }
         catch (error) {
             console.log("error", error);
         }
-        console.log({ email, password });
+        
     };
 
     return (

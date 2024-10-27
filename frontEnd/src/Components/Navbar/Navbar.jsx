@@ -2,36 +2,20 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from "axios";
 import links from "../../connect";
+import {useRecoilValue} from 'recoil';
+import {userAtom} from '../../state/user';
 
 export default function Navbar() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [userInfo, setuserInfo] = useState({});
+    const user = useRecoilValue(userAtom);
+
+    // const [userInfo, setuserInfo] = useState({});
     const { backEndLink } = links;
-    const [ifLoggedIn, setifLoggedIn] = useState(false);
+    // const [ifLoggedIn, setifLoggedIn] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [userType, setUsertype] = useState("");
     const dropdownRef = useRef(null);
-    console.log(location)
-    useEffect(() => {
-        const checkIfLoggedIn = async () => {
-            try {
-                let email = localStorage.getItem("currentUser");
-                console.log("email is :: " , email);
-                if(!email) return;
-                let response = await axios.post(`${backEndLink}/user/getInfo`, {email} ,{
-                    withCredentials: true
-                });
-                console.log("response is  ", response);
-                setifLoggedIn(true);
-                setUsertype(response.data.user_type)
-                setuserInfo(response.data);
-            } catch (error) {
-                console.log("error :: ", error);
-            }
-        }
-        checkIfLoggedIn();
-    }, [location , ]);
 
 
     useEffect(() => {
@@ -56,8 +40,8 @@ export default function Navbar() {
     };
 
     const handleUserNav = () =>{
-        console.log("user clicked", userType);
-        if(userType.includes("Student")){
+
+        if(user.user_type.includes("Student")){
             navigate("/studentView")
             return;
         }
@@ -75,14 +59,9 @@ export default function Navbar() {
                     </span>
                 </div>
                 {
-                    ifLoggedIn ?
+                    user.isAuthenticated ?
                         <section className='flex items-center justify-center space-x-4'>
-                            <button className=''>
-                                Welcome <b> {userInfo.fname} {userInfo.lname} </b>
-                            </button>
-                            <button  style={{background : "rgb(147 51 234", padding : "10px", color:"white", fontWeight : "bold", borderRadius : "100px", padding : "5px 12px"}} onClick={handleUserNav} className=''>
-                                {userInfo.fname[0]}
-                            </button>
+                            <p className='text-2xl pr-4'>Welcome &nbsp;<span className='text-purple-400 font-medium cursor-pointer'>{user.fname}</span></p>
                         </section>
                         :
                         <section className='relative flex items-center justify-center space-x-4'>

@@ -42,6 +42,7 @@ export const authHandler = async (req, res) => {
         const user = userExists.rows[0];
         const isPasswordValid = await bcrypt.compare(payload.password, user.user_password);
 
+      
         if(!isPasswordValid){
             return res.status(responseCode.unauthorised).json({msg:"Invalid Password"});
         }
@@ -67,7 +68,18 @@ export const authHandler = async (req, res) => {
 
         res.cookie('jwt', token, { httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
 
-        return res.json({status:"Logged In",token})
+        return res.json({status:"Success",
+            fname: user.fname,
+            lname: user.lname,
+            email: user.email, 
+            user_type: user.user_type,
+            scholar_id: user?.scholar_id,
+            department: user?.department,
+            enrolled_course: user?.enrolled_course,
+            current_year: user?.current_year,
+            class_id: user?.class_id,
+            experience_level: user?.experience_level
+        });
     }
     catch (err) {
         console.log("@authHandler : \n" + err);
