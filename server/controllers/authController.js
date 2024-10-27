@@ -51,7 +51,6 @@ export const authHandler = async (req, res) => {
             {
             username: user.fname +" "+user.lname,
             email: user.email,
-            createdAt: user.created_at
             },
             process.env.TOKEN_SECRET_KEY,
             {expiresIn:'30d'}

@@ -5,27 +5,33 @@ import links from "../../connect";
 
 const Professor = () => {
     const { backEndLink } = links;
-
+    // fname VARCHAR(25) NOT NULL,
+    // lname VARCHAR(25) NOT NULL,
+    // gender VARCHAR(6) NOT NULL,
+    // email VARCHAR(50) PRIMARY KEY,
+    // user_password VARCHAR(15) NOT NULL,
+	// user_type VARCHAR(15) NOT NULL,
+	// experience_level VARCHAR(20) NOT NULL,
+	// department TEXT[],
     // States for form fields
     const [email, setEmail] = useState('');
-    const [userName, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [user_password, setPassword] = useState('');
     const [fname, setFname] = useState('');
-    const [lastname, setLastname] = useState('');
+    const [lname, setLastname] = useState('');
     const [gender, setGender] = useState('');
-    const [mobile, setMobile] = useState('');
-    const [userType, setUserType] = useState("Professor");
-    const [experienceLevel, setExperienceLevel] = useState(''); // New state for experience level
-    const [regularOrGuest, setRegularOrGuest] = useState('');   // New state for regular or guest
+    const [department, setMobile] = useState('');
+    const [experience_level, setExperienceLevel] = useState(''); // New state for experience level
+    const [user_type, setRegularOrGuest] = useState('');   // New state for regular or guest
 
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
+        console.log({ email, user_password, fname, lname, gender, department, user_type, experience_level });
         e.preventDefault();
         try {
             // Make the request with the new fields
-            let response = await axios.post(`${backEndLink}/signup`, {
-                email, password, fname, lastname, gender, mobile, userType, experienceLevel, regularOrGuest  // Added regularOrGuest
+            let response = await axios.post(`${backEndLink}/register`, {
+                email, password : user_password, fname, lname, gender, department, user_type, experience_level  // Added user_type
             }, { withCredentials: true });
 
             console.log("response is :: ", response);
@@ -34,7 +40,6 @@ const Professor = () => {
         catch (error) {
             console.log("error", error);
         }
-        console.log({ email, password, fname, lastname, gender, mobile, userType, experienceLevel, regularOrGuest });
     };
 
     return (
@@ -57,7 +62,7 @@ const Professor = () => {
                     <label className="block text-gray-700">Last Name</label>
                     <input
                         type="text"
-                        value={lastname}
+                        value={lname}
                         onChange={(e) => setLastname(e.target.value)}
                         required
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
@@ -80,10 +85,10 @@ const Professor = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700">Mobile</label>
+                    <label className="block text-gray-700">Department</label>
                     <input
                         type="text"
-                        value={mobile}
+                        value={department}
                         onChange={(e) => setMobile(e.target.value)}
                         required
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
@@ -104,8 +109,8 @@ const Professor = () => {
                 <div className="mb-4">
                     <label className="block text-gray-700">Password</label>
                     <input
-                        type="password"
-                        value={password}
+                        type="user_password"
+                        value={user_password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         className="mt-1 block w-full p-2 border border-gray-300 rounded focus:ring focus:ring-purple-600 focus:outline-none"
@@ -116,7 +121,7 @@ const Professor = () => {
                 <div className="mb-4">
                     <label className="block text-gray-700">Experience Level</label>
                     <select
-                        value={experienceLevel}
+                        value={experience_level}
                         onChange={(e) => setExperienceLevel(e.target.value)}
                         required
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
@@ -133,14 +138,14 @@ const Professor = () => {
                 <div className="mb-4">
                     <label className="block text-gray-700">User Type</label>
                     <select
-                        value={regularOrGuest}
+                        value={user_type}
                         onChange={(e) => setRegularOrGuest(e.target.value)}
                         required
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
                     >
                         <option value="">Select User Type</option>
-                        <option value="Regular">Faculty Member</option>
-                        <option value="Guest">Guest Lecturer</option>
+                        <option value="Faculty Member">Faculty Member</option>
+                        <option value="Guest Lecturer">Guest Lecturer</option>
                     </select>
                 </div>
 

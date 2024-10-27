@@ -10,23 +10,28 @@ export default function Navbar() {
     const { backEndLink } = links;
     const [ifLoggedIn, setifLoggedIn] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [userType, setUsertype] = useState("");
     const dropdownRef = useRef(null);
 
     useEffect(() => {
         const checkIfLoggedIn = async () => {
             try {
-                let response = await axios.get(`${backEndLink}/user/getInfo`, {
+                let email = localStorage.getItem("currentUser");
+                console.log("email is :: " , email);
+                if(!email) return;
+                let response = await axios.post(`${backEndLink}/user/getInfo`, {email} ,{
                     withCredentials: true
                 });
                 console.log("response is  ", response);
                 setifLoggedIn(true);
-                setuserInfo(response);
+                setUsertype(response.data.user_type)
+                setuserInfo(response.data);
             } catch (error) {
                 console.log("error :: ", error);
             }
         }
         checkIfLoggedIn();
-    }, [location]);
+    }, [location , ]);
 
 
     useEffect(() => {
@@ -50,6 +55,15 @@ export default function Navbar() {
         setShowDropdown(!showDropdown);
     };
 
+    const handleUserNav = () =>{
+        console.log("user clicked", userType);
+        if(userType.includes("Student")){
+            navigate("/studentView")
+            return;
+        }
+        navigate("/professorView")
+    }
+
     return (
         <>
             <nav className="flex items-center justify-between p-4 border-b">
@@ -63,8 +77,11 @@ export default function Navbar() {
                 {
                     ifLoggedIn ?
                         <section className='flex items-center justify-center space-x-4'>
-                            <button onClick={() => { navigate("/login") }} className=''>
-                                Welcome Ankit
+                            <button className=''>
+                                Welcome <b> {userInfo.fname} {userInfo.lname} </b>
+                            </button>
+                            <button  style={{background : "rgb(147 51 234", padding : "10px", color:"white", fontWeight : "bold", borderRadius : "100px", padding : "5px 12px"}} onClick={handleUserNav} className=''>
+                                {userInfo.fname[0]}
                             </button>
                         </section>
                         :

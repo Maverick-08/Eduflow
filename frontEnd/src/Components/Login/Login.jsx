@@ -18,6 +18,7 @@ const Login = () => {
             }, {
                 withCredentials: true,
             })
+            localStorage.setItem("currentUser" , email);
             console.log(response);
             navigate("/");
         }
