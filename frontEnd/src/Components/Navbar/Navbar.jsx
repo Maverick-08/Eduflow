@@ -12,7 +12,7 @@ export default function Navbar() {
     const [showDropdown, setShowDropdown] = useState(false);
     const [userType, setUsertype] = useState("");
     const dropdownRef = useRef(null);
-
+    console.log(location)
     useEffect(() => {
         const checkIfLoggedIn = async () => {
             try {
