@@ -61,7 +61,7 @@ export default function Navbar() {
                 {
                     user.isAuthenticated ?
                         <section className='flex items-center justify-center space-x-4'>
-                            <p className='text-2xl pr-4'>Welcome &nbsp;<span className='text-purple-400 font-medium cursor-pointer'>{user.fname}</span></p>
+                            <p className='text-2x pr-4'>Welcome &nbsp;<span className='text-purple-400 font-medium cursor-pointer'>{user.fname}</span></p>
                         </section>
                         :
                         <section className='relative flex items-center justify-center space-x-4'>

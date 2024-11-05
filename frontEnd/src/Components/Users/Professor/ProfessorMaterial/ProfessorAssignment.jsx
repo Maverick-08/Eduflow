@@ -12,6 +12,12 @@ export default function ProfessorAssignment() {
                     </h1>
                 </center>
                 <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+                    <input style={{"border" : "1px solid gray", width : "100%", padding:"3px"}} type="text" name="" id="" placeholder='Enter title' />
+                    <br />
+                    <br />
+                    <input style={{"border" : "1px solid gray", width : "100%", padding:"3px"}} type="text" name="" id="" placeholder='Enter grade' />
+                    <br />
+                    <br />
                     <h2 className="text-xl font-semibold mb-4">Upload Documents</h2>
                     <form>
                         <div className="mb-4">
