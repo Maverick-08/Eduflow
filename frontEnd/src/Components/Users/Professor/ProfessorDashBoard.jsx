@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import CreateAssignment from './CreateAssignment';
 
 export default function ProfessorDashBoard() {
+    const [isAssignmentVisible, setAssignmentVisible] = useState(false);
     const courses = [
         { title: "Machine Learning (The...", year: "2020-2023", teacher: "", image: "https://placehold.co/100x100", bgColor: "bg-gray-700" },
         { title: "Data Mining 2023", year: "", teacher: "", image: "https://placehold.co/100x100", bgColor: "bg-purple-600" },
@@ -18,12 +20,16 @@ export default function ProfessorDashBoard() {
         navigate("/ProfessorView/professorTask", { state: { classId: title } });
     };
 
+    const toggleAssignmentForm = () => {
+        setAssignmentVisible(!isAssignmentVisible);
+    };
+
     return (
         <main className="flex-1 p-6" style={{ height: "100vh" }}>
             <header className="flex items-center justify-start mb-6">
                 <h1 className="text-2xl font-semibold mr-6">Classes</h1>
                 <h1
-                    onClick={() => console.log("adding class")}
+                    onClick={toggleAssignmentForm}
                     style={{
                         border: "2px solid black",
                         borderRadius: "100px",
@@ -62,6 +68,11 @@ export default function ProfessorDashBoard() {
                     </div>
                 ))}
             </div>
+            {isAssignmentVisible && (
+                <div className="secondSection fixed top-[15%] left-1/2 transform -translate-x-1/2 bg-white p-6 rounded-lg shadow-md">
+                    <CreateAssignment setAssignmentVisible={setAssignmentVisible} />
+                </div>
+            )}
         </main>
     );
 }
