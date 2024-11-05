@@ -7,7 +7,6 @@ import Logout from "./routes/logout.js";
 import createClassroom from "./routes/createClassroom.js";
 import joinClassroom from "./routes/joinClassroom.js";
 import uploadAssignment from "./routes/uploadAssignment.js";
-import fetchStudents from "./routes/fetchStudentsOfClass.js";
 
 const app = express();
 
@@ -18,7 +17,7 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(cookieParser()); 
+app.use(cookieParser());
 
 app.get("/test", (req, res) => {
   res.status(200).json({ msg: "working" });
@@ -31,7 +30,9 @@ app.use("/logout", Logout);
 app.use("/createClassroom", createClassroom);
 app.use("/joinClassroom", joinClassroom);
 app.use("/uploadAssignment", uploadAssignment);
-app.use("/getPeople", fetchStudents);
+
+app.use("/studentAssignmentUpload",studentAssignment)
+
 
 app.listen(3000, () => {
   console.log("Server is running");
