@@ -7,6 +7,7 @@ import Logout from "./routes/logout.js";
 import createClassroom from "./routes/createClassroom.js";
 import joinClassroom from "./routes/joinClassroom.js";
 import uploadAssignment from "./routes/uploadAssignment.js";
+import submitAssignment from "./routes/submitAssignment.js";
 
 const app = express();
 
@@ -30,8 +31,7 @@ app.use("/logout", Logout);
 app.use("/createClassroom", createClassroom);
 app.use("/joinClassroom", joinClassroom);
 app.use("/uploadAssignment", uploadAssignment);
-
-app.use("/studentAssignmentUpload",studentAssignment)
+app.use("/submitAssignment",submitAssignment)
 
 
 app.listen(3000, () => {
