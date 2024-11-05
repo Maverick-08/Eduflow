@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function CreateAssignment({setAssignmentVisible}) {
+export default function CreateAssignment({ setAssignmentVisible }) {
   const [email, setEmail] = useState('');
   const [department, setDepartment] = useState('');
   const [course, setCourse] = useState('');
@@ -15,7 +15,7 @@ export default function CreateAssignment({setAssignmentVisible}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Validation: Ensure all fields are filled and at least one document is uploaded
-    if (!email || !department || !course || !year || !subjectName ) {
+    if (!email || !department || !course || !year || !subjectName) {
       setError('Please fill in all fields');
       return;
     }
@@ -31,7 +31,7 @@ export default function CreateAssignment({setAssignmentVisible}) {
       subjectName,
     });
     naviagte("/ProfessorView");
-    
+
     // Here, you would typically upload the data to a server or perform other actions
   };
 
@@ -39,9 +39,9 @@ export default function CreateAssignment({setAssignmentVisible}) {
     <>
       <center>
         <center>
-          <h2 style={{ fontSize: "30px", cursor:"pointer" }}>
+          <h2 style={{ fontSize: "30px", cursor: "pointer" }}>
             <b style={{ "color": "rgb(147 51 234)" }} >Create Assignment</b>
-            <small onClick={()=>{setAssignmentVisible(false)}} style={{fontSize : "20px", marginLeft : "20px"}} >x</small>
+            <small onClick={() => { setAssignmentVisible(false) }} style={{ fontSize: "20px", marginLeft: "20px" }} >x</small>
           </h2>
         </center>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }} className="bg-white p-6 rounded-lg shadow-md mt-6">
