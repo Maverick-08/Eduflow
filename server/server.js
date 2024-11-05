@@ -7,6 +7,7 @@ import Logout from "./routes/logout.js";
 import createClassroom from "./routes/createClassroom.js";
 import joinClassroom from "./routes/joinClassroom.js";
 import uploadAssignment from "./routes/uploadAssignment.js";
+import fetchStudents from "./routes/fetchStudentsOfClass.js";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use("/logout", Logout);
 app.use("/createClassroom", createClassroom);
 app.use("/joinClassroom", joinClassroom);
 app.use("/uploadAssignment", uploadAssignment);
+app.use("/getPeople", fetchStudents);
 
 app.listen(3000, () => {
   console.log("Server is running");
