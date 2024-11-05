@@ -6,3 +6,4 @@ const router = Router();
 router.post("/", registrationHandler)
 
 export default router;
+
