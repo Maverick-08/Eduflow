@@ -3,7 +3,7 @@ import connectJs from '../../../connect';
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 
-export default function JoinClassRoom({ setAssignmentVisible }) {
+export default function JoinClassRoom({ setAssignmentVisible, setClasses }) {
   const [classID, setClassID] = useState('');
 
   const handleSubmit = async (e) => {
@@ -18,11 +18,22 @@ export default function JoinClassRoom({ setAssignmentVisible }) {
       }, {
         withCredentials: true
       })
+      try {
+          let email = JSON.parse(localStorage.getItem("userInfo")).email;
+          let response = await axios.post(`${backEndLink}/fetchClassRoomS`, {
+            email
+          }, { withCredentials: true });
+          console.log("op :: ", response.data);
+          setClasses(response.data);
+      }
+      catch (error) {
+          console.log("Error fetching classes:", error);
+      }
       setAssignmentVisible(false);
       console.log(response);
     }
     catch (error) {
-      toast.error("Wrong code" , {autoClose : 500})
+      toast.error("Wrong code", { autoClose: 500 })
       console.log("error :: ", error);
     }
     setClassID(''); // Clear the input after submission
@@ -30,7 +41,7 @@ export default function JoinClassRoom({ setAssignmentVisible }) {
 
   return (
     <div className="flex flex-col items-center justify-center h-full">
-      <ToastContainer/>
+      <ToastContainer />
       <div onClick={() => { setAssignmentVisible(false) }} style={{ cursor: "pointer", position: "fixed", top: "5%", right: "10%" }}  >x</div>
       <form onSubmit={handleSubmit} className="w-full max-w-sm p-4 bg-white rounded shadow-md">
         <label htmlFor="classID" className="block text-sm font-medium text-gray-700 mb-2">
