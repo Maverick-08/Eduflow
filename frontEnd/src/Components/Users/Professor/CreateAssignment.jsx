@@ -4,7 +4,7 @@ import axios from 'axios';
 import conectjs from "../../../connect";
 
 export default function CreateAssignment({ setAssignmentVisible, setCourses }) {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(JSON.parse(localStorage.getItem("userInfo")).email);
   const [department, setDepartment] = useState('');
   const [course, setCourse] = useState('');
   const [year, setYear] = useState('');
@@ -62,7 +62,7 @@ export default function CreateAssignment({ setAssignmentVisible, setCourses }) {
     <>
       <center>
         <h2 style={{ fontSize: '30px', cursor: 'pointer' }}>
-          <b style={{ color: 'rgb(147 51 234)' }}>Create Class</b>
+          <b style={{ color: 'rgb(147 51 234)' }}>Create ClassRoom</b>
           <small
             onClick={() => setAssignmentVisible(false)}
             style={{ fontSize: '20px', marginLeft: '20px' }}
@@ -77,16 +77,6 @@ export default function CreateAssignment({ setAssignmentVisible, setCourses }) {
           <form onSubmit={handleSubmit}>
             {error && <p className="text-red-500 mb-4">{error}</p>}
             {success && <p className="text-green-500 mb-4">{success}</p>}
-
-            <input
-              style={{ border: '1px solid gray', width: '100%', padding: '3px' }}
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter professor email"
-            />
-            <br />
-            <br />
             <input
               style={{ border: '1px solid gray', width: '100%', padding: '3px' }}
               type="text"

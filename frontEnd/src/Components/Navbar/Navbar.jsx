@@ -4,6 +4,7 @@ import axios from "axios";
 import links from "../../connect";
 import {useRecoilValue} from 'recoil';
 import {userAtom} from '../../state/user';
+import connectJs from '../../connect';
 
 export default function Navbar() {
     const navigate = useNavigate();
@@ -48,6 +49,21 @@ export default function Navbar() {
         navigate("/professorView")
     }
 
+    const handleLogout = async() =>{
+        const { backEndLink } = connectJs;
+        try{
+            let response = await axios.get(`${backEndLink}/logout` , {
+                withCredentials : true
+            });
+            console.log(response);
+            localStorage.clear();
+            window.location.reload();
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+
     return (
         <>
             <nav className="flex items-center justify-between p-4 border-b">
@@ -61,7 +77,8 @@ export default function Navbar() {
                 {
                     user.isAuthenticated ?
                         <section className='flex items-center justify-center space-x-4'>
-                            <p className='text-2x pr-4'>Welcome &nbsp;<span className='text-purple-400 font-medium cursor-pointer'>{user.fname}</span></p>
+                            <p className='text-2x pr-4'>Welcome &nbsp;<span className='text-purple-600 font-medium cursor-pointer'>{user.fname}</span></p>
+                            <button onClick={handleLogout} className='bg-purple-600 p-2 rounded-md text-white' >Logout</button>
                         </section>
                         :
                         <section className='relative flex items-center justify-center space-x-4'>
