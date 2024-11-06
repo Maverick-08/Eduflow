@@ -8,36 +8,43 @@ export default function ProfessorDashBoard() {
     const [isAssignmentVisible, setAssignmentVisible] = useState(false);
     const { backEndLink } = connectJs;
     const [courses, setCourses] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getClass = async () => {
             let email = JSON.parse(localStorage.getItem("userInfo")).email;
-            console.log(email);
             try {
                 let response = await axios.post(`${backEndLink}/fetchClassRoomP`, {
                     email
-                }, {
-                    withCredentials: true
-                });
-                console.log("op :: ", response.data);
+                }, { withCredentials: true });
+                console.log(response.data);
                 setCourses(response.data);
+            } catch (error) {
+                console.log("Error fetching courses:", error);
             }
-            catch (error) {
-
-            }
-        }
+        };
         getClass();
-    }, [])
-
-    const navigate = useNavigate();
+    }, []);
 
     const handleClass = (title) => {
-        console.log("class");
         navigate("/ProfessorView/professorTask", { state: { classId: title } });
     };
 
     const toggleAssignmentForm = () => {
         setAssignmentVisible(!isAssignmentVisible);
+    };
+
+    // Handle course deletion
+    const handleDeleteCourse = async (class_id) => {
+        console.log("id :: " ,class_id);
+        try {
+            setCourses(courses.filter(course => course.class_id !== class_id));
+            await axios.post(`${backEndLink}/deleteClassroom`, {
+                class_id
+            }, { withCredentials: true });
+        } catch (error) {
+            console.log("Error deleting course:", error);
+        }
     };
 
     return (
@@ -59,29 +66,38 @@ export default function ProfessorDashBoard() {
             </header>
             <div className="grid grid-cols-3 gap-6">
                 {courses.map((course, index) => (
-                    <div style={{ cursor: "pointer" }}
-                        onClick={() => handleClass(course.title)}
+                    <div
                         key={index}
+                        style={{ cursor: "pointer" }}
                         className="bg-white rounded-lg shadow-md overflow-hidden"
                     >
-                        <div className={`p-4 ${course.bgColor} text-black relative`}>
-                            <h2 className="text-purple-600 text-lg font-semibold">Name : {course.subject_name}</h2>
-                            {course.year && <p className="text-sm">Year : {course.year}</p>}
+                        <div onClick={() => handleClass(course.title)} className={`p-4 ${course.bgColor} text-black relative`}>
+                            <h2 className="text-purple-600 text-lg font-semibold">Name: {course.subject_name}</h2>
+                            {course.year && <p className="text-sm">Year: {course.year}</p>}
                             <div className="absolute bottom-2 right-2">
                                 {course.image ? (
                                     <img src={course.image} alt="Teacher" className="w-10 h-10 rounded-full" />
                                 ) : (
-                                    <div className="w-10 h-10 bg-gray-500 text-white rounded-full flex items-center justify-center">{course.initial}</div>
+                                    <div className="w-10 h-10 bg-purple-500 text-white rounded-full flex items-center justify-center">{course.initial}</div>
                                 )}
                             </div>
                         </div>
                         <div className="p-4">
                             <p className="text-gray-600">Course - {course.course[0]}</p>
                             <p className="text-gray-600">Department - {course.department[0]}</p>
-                            <p className=" text-blue-600">{course.isindividual ? "Individual" : "Combined"}</p>
+                            <p className="text-blue-600">{course.isindividual ? "Individual" : "Combined"}</p>
                         </div>
                         <div className="flex justify-between p-4 border-t">
                             <i className="fas fa-clipboard text-gray-600"></i>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();  // Prevent navigation when clicking delete
+                                    handleDeleteCourse(course.class_id);
+                                }}
+                                className="text-red-500 hover:text-red-700"
+                            >
+                                Delete
+                            </button>
                         </div>
                     </div>
                 ))}

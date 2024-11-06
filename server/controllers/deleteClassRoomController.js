@@ -4,7 +4,6 @@ config();
 
 export const deleteClassRoomhandler = async (req, res) => {
   const { class_id } = req.body;
-
   try {
     // Delete query to remove classroom by class_id
     const deleteQuery = `

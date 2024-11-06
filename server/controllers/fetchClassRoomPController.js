@@ -12,7 +12,7 @@ export const fetchClassRoomPhandler = async (req, res) => {
             JOIN professor p ON p.email = $1
             WHERE c.class_id = ANY(p.class_id)
         `;
-        
+
         const result = await Client.query(query, [email]);
 
         if (result.rows.length === 0) {
@@ -20,7 +20,7 @@ export const fetchClassRoomPhandler = async (req, res) => {
         }
 
         res.status(200).json(result.rows);
-    }catch (err) {
-    return res.status(500).json({ msg: err.message });
-  }
+    } catch (err) {
+        return res.status(500).json({ msg: err.message });
+    }
 };
