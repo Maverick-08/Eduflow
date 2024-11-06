@@ -21,7 +21,7 @@ export const createClassroomHandler = async (req, res) => {
     const { email, department, course, year, isIndividual, subject_name } =
       req.body;
     const class_id = generateClassId();
-
+    console.log(req.body);
     if (
       !email ||
       !department ||

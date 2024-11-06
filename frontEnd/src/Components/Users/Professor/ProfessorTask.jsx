@@ -4,6 +4,7 @@ import ProfessMaterial from './ProfessorMaterial/ProfessMaterial';
 import ProfessorAssignment from './ProfessorMaterial/ProfessorAssignment';
 import ProfessorStudents from './ProfessorMaterial/ProfessorStudents';
 import ProfessorStreams from './ProfessorMaterial/ProfessorStreams';
+import AttendancePage from './ProfessorMaterial/AttendancePage';
 
 export default function ProfessorTask() {
     const location = useLocation();
@@ -29,7 +30,7 @@ export default function ProfessorTask() {
                 </div>
                 <div
                     onClick={() => handleTabClick("professorMaterial")}
-                    className={`text-purple-600 cursor-pointer ${activeTab === "" ? "border-b-2 border-purple-600 pb-1" : ""}`}
+                    className={`text-purple-600 cursor-pointer ${activeTab === "professorMaterial" ? "border-b-2 border-purple-600 pb-1" : ""}`}
                 >
                     Material
                 </div>
@@ -41,9 +42,15 @@ export default function ProfessorTask() {
                 </div>
                 <div
                     onClick={() => handleTabClick("studentsInClass")}
-                    className={`text-purple-600 cursor-pointer ${activeTab === "assignment" ? "border-b-2 border-purple-600 pb-1" : ""}`}
+                    className={`text-purple-600 cursor-pointer ${activeTab === "studentsInClass" ? "border-b-2 border-purple-600 pb-1" : ""}`}
                 >
                     Students
+                </div>
+                <div
+                    onClick={() => handleTabClick("attendancePage")}
+                    className={`text-purple-600 cursor-pointer ${activeTab === "attendancePage" ? "border-b-2 border-purple-600 pb-1" : ""}`}
+                >
+                    Attendence
                 </div>
             </nav>
 
@@ -52,6 +59,7 @@ export default function ProfessorTask() {
                 <Route path="/professorMaterial" element={<ProfessMaterial classId={classId} />} />
                 <Route path="/assignment" element={<ProfessorAssignment classId={classId} />} />
                 <Route path="/studentsInClass" element={<ProfessorStudents classId={classId} />} />
+                <Route path="/attendancePage" element={<AttendancePage classId={classId} />} />
             </Routes>
         </div>
     );

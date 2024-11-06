@@ -32,7 +32,7 @@ app.use("/createClassroom", createClassroom);
 app.use("/joinClassroom", joinClassroom);
 app.use("/uploadAssignment", uploadAssignment);
 app.use("/getPeople", fetchStudents);
-
+ 
 app.listen(3000, () => {
   console.log("Server is running");
 });
