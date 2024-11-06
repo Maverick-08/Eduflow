@@ -33,6 +33,8 @@ app.use("/logout", Logout);
 app.use("/createClassroom", createClassroom);
 app.use("/joinClassroom", joinClassroom);
 app.use("/uploadAssignment", uploadAssignment);
+app.use("/getPeople", fetchStudents);
+ 
 app.use("/submitAssignment",submitAssignment)
 app.use("/viewSubmissions",submissionlist)
 app.use("/fetchClassRoomP",fetchClassRoomP)
