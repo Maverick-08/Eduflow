@@ -10,6 +10,7 @@ import uploadAssignment from "./routes/uploadAssignment.js";
 import submitAssignment from "./routes/submitAssignment.js";
 import submissionlist from "./routes/submissionsList.js";
 import fetchClassRoomP from "./routes/fetchClassRoomP.js";
+import fetchClassRoomS from "./routes/fetchClassroomofStudent.js";
 import fetchStudents from "./routes/fetchStudentsOfClass.js";
 import deleteClassroom from "./routes/deleteClassroom.js";
 
@@ -40,6 +41,7 @@ app.use("/getPeople", fetchStudents);
 app.use("/submitAssignment",submitAssignment)
 app.use("/viewSubmissions",submissionlist)
 app.use("/fetchClassRoomP",fetchClassRoomP)
+app.use("/fetchClassRoomS",fetchClassRoomS)
 app.use("/deleteClassroom",deleteClassroom)
 
 
