@@ -17,11 +17,17 @@ export default function CreateAssignment({ setAssignmentVisible }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
     if (!email || !department || !course || !year || !subject_name) {
+=======
+    // Validation: Ensure all fields are filled and at least one document is uploaded
+    if (!email || !department || !course || !year || !subjectName) {
+>>>>>>> 90b22b3e42be5629052219b229cf69b9b2980081
       setError('Please fill in all fields');
       return;
     }
 
+<<<<<<< HEAD
     setError('');
     setSuccess('');
 
@@ -49,11 +55,26 @@ export default function CreateAssignment({ setAssignmentVisible }) {
     } catch (err) {
       setError(err.response ? err.response.data.msg : 'Error creating classroom');
     }
+=======
+    // Handle form submission
+    console.log({
+      email,
+      department,
+      course,
+      year,
+      isIndividual,
+      subjectName,
+    });
+    naviagte("/ProfessorView");
+
+    // Here, you would typically upload the data to a server or perform other actions
+>>>>>>> 90b22b3e42be5629052219b229cf69b9b2980081
   };
 
   return (
     <>
       <center>
+<<<<<<< HEAD
         <h2 style={{ fontSize: '30px', cursor: 'pointer' }}>
           <b style={{ color: 'rgb(147 51 234)' }}>Create Class</b>
           <small
@@ -67,6 +88,15 @@ export default function CreateAssignment({ setAssignmentVisible }) {
           style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           className="bg-white p-6 rounded-lg shadow-md mt-6"
         >
+=======
+        <center>
+          <h2 style={{ fontSize: "30px", cursor: "pointer" }}>
+            <b style={{ "color": "rgb(147 51 234)" }} >Create Assignment</b>
+            <small onClick={() => { setAssignmentVisible(false) }} style={{ fontSize: "20px", marginLeft: "20px" }} >x</small>
+          </h2>
+        </center>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }} className="bg-white p-6 rounded-lg shadow-md mt-6">
+>>>>>>> 90b22b3e42be5629052219b229cf69b9b2980081
           <form onSubmit={handleSubmit}>
             {error && <p className="text-red-500 mb-4">{error}</p>}
             {success && <p className="text-green-500 mb-4">{success}</p>}

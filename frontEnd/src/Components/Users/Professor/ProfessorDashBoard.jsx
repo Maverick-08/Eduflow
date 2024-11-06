@@ -69,7 +69,7 @@ export default function ProfessorDashBoard() {
                 ))}
             </div>
             {isAssignmentVisible && (
-                <div className="secondSection fixed top-[15%] left-1/2 transform -translate-x-1/2 bg-white p-6 rounded-lg shadow-md">
+                <div style={{boxShadow : "0px 0px 10px gray"}} className="secondSection fixed top-[15%] left-1/2 transform -translate-x-1/2 bg-white p-6 rounded-lg shadow-md">
                     <CreateAssignment setAssignmentVisible={setAssignmentVisible} />
                 </div>
             )}
