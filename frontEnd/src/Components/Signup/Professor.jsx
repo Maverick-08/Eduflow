@@ -19,19 +19,22 @@ const Professor = () => {
     const [fname, setFname] = useState('');
     const [lname, setLastname] = useState('');
     const [gender, setGender] = useState('');
-    const [department, setMobile] = useState('');
+    const [department, setDepartment] = useState([]);
     const [experience_level, setExperienceLevel] = useState(''); // New state for experience level
     const [user_type, setRegularOrGuest] = useState('');   // New state for regular or guest
 
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
+        let newArra =[];
+        newArra.push(department)
         console.log({ email, user_password, fname, lname, gender, department, user_type, experience_level });
         e.preventDefault();
         try {
             // Make the request with the new fields
             let response = await axios.post(`${backEndLink}/register`, {
-                email, password : user_password, fname, lname, gender, department, user_type, experience_level  // Added user_type
+                email, password : user_password, fname, lname, gender, department : newArra, user_type, experience_level  // Added user_type
             }, { withCredentials: true });
 
             console.log("response is :: ", response);
@@ -89,7 +92,7 @@ const Professor = () => {
                     <input
                         type="text"
                         value={department}
-                        onChange={(e) => setMobile(e.target.value)}
+                        onChange={(e) => setDepartment(e.target.value)}
                         required
                         className="mt-1 block w-full p-2 border border-gray-300 rounded"
                     />

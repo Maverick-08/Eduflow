@@ -78,7 +78,7 @@ export const registrationHandler = async (req,res) => {
             // Create temporary scholar id
             const tempScholarId = "G-" + Math.floor(Math.random() * 100000000);
 
-            await Client.query('INSERT INTO student(fname, lname, gender, email, user_password, scholar_id, user_type, department, enrolled_course, current_year) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',[payload.fname, payload.lname, payload.gender, payload.email, encryptedPassword, tempScholarId, payload.user_type, payload.department, payload.enrolled_course, 1])
+            await Client.query('INSERT INTO student(fname, lname, gender, email, user_password, scholar_id, user_type, department, enrolled_course, current_year) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',[payload.fname, payload.lname, payload.gender, payload.email, encryptedPassword, tempScholarId, payload.user_type, payload.department, payload.enrolled_course, 1]) 
 
             return res.json({msg:"Registered",scholar_id:tempScholarId})
         }

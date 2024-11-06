@@ -43,7 +43,7 @@ export default function ProfessorDashBoard() {
             </header>
             <div className="grid grid-cols-3 gap-6">
                 {courses.map((course, index) => (
-                    <div
+                    <div style={{cursor : "pointer"}}
                         onClick={() => handleClass(course.title)}
                         key={index}
                         className="bg-white rounded-lg shadow-md overflow-hidden"

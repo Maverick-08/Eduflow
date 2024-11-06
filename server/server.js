@@ -33,11 +33,16 @@ app.use("/logout", Logout);
 app.use("/createClassroom", createClassroom);
 app.use("/joinClassroom", joinClassroom);
 app.use("/uploadAssignment", uploadAssignment);
+<<<<<<< HEAD
+app.use("/getPeople", fetchStudents);
+ 
+=======
 app.use("/submitAssignment",submitAssignment)
 app.use("/viewSubmissions",submissionlist)
 app.use("/fetchClassRoomP",fetchClassRoomP)
 
 
+>>>>>>> 90b22b3e42be5629052219b229cf69b9b2980081
 app.listen(3000, () => {
-  console.log("Server is running");
+  console.log("Server is running 3000");
 });
