@@ -1,17 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CreateAssignment from './CreateAssignment';
+import axios from "axios";
+import connectJs from '../../../connect';
 
 export default function ProfessorDashBoard() {
     const [isAssignmentVisible, setAssignmentVisible] = useState(false);
-    const courses = [
-        { title: "Machine Learning (The...", year: "2020-2023", teacher: "", image: "https://placehold.co/100x100", bgColor: "bg-gray-700" },
-        { title: "Data Mining 2023", year: "", teacher: "", image: "https://placehold.co/100x100", bgColor: "bg-purple-600" },
-        { title: "Data Mining 2023", year: "", teacher: "", image: "https://placehold.co/100x100", bgColor: "bg-purple-600" },
-        { title: "Data Mining 2023", year: "", teacher: "", image: "https://placehold.co/100x100", bgColor: "bg-purple-600" },
-        { title: "Data Mining 2023", year: "", teacher: "", image: "https://placehold.co/100x100", bgColor: "bg-purple-600" },
-        { title: "Data Mining 2023", year: "", teacher: "", image: "https://placehold.co/100x100", bgColor: "bg-purple-600" },
-    ];
+    const { backEndLink } = connectJs;
+    const [courses, setCourses] = useState([]);
+
+    useEffect(() => {
+        const getClass = async () => {
+            let email = JSON.parse(localStorage.getItem("userInfo")).email;
+            console.log(email);
+            try {
+                let response = await axios.post(`${backEndLink}/fetchClassRoomP`, {
+                    email
+                }, {
+                    withCredentials: true
+                });
+                console.log("op :: ", response.data);
+                setCourses(response.data);
+            }
+            catch (error) {
+
+            }
+        }
+        getClass();
+    }, [])
 
     const navigate = useNavigate();
 
@@ -43,14 +59,14 @@ export default function ProfessorDashBoard() {
             </header>
             <div className="grid grid-cols-3 gap-6">
                 {courses.map((course, index) => (
-                    <div style={{cursor : "pointer"}}
+                    <div style={{ cursor: "pointer" }}
                         onClick={() => handleClass(course.title)}
                         key={index}
                         className="bg-white rounded-lg shadow-md overflow-hidden"
                     >
-                        <div className={`p-4 ${course.bgColor} text-white relative`}>
-                            <h2 className="text-lg font-semibold">{course.title}</h2>
-                            {course.year && <p className="text-sm">{course.year}</p>}
+                        <div className={`p-4 ${course.bgColor} text-black relative`}>
+                            <h2 className="text-purple-600 text-lg font-semibold">Name : {course.subject_name}</h2>
+                            {course.year && <p className="text-sm">Year : {course.year}</p>}
                             <div className="absolute bottom-2 right-2">
                                 {course.image ? (
                                     <img src={course.image} alt="Teacher" className="w-10 h-10 rounded-full" />
@@ -60,7 +76,9 @@ export default function ProfessorDashBoard() {
                             </div>
                         </div>
                         <div className="p-4">
-                            <p className="text-gray-600">{course.teacher}</p>
+                            <p className="text-gray-600">Course - {course.course[0]}</p>
+                            <p className="text-gray-600">Department - {course.department[0]}</p>
+                            <p className=" text-blue-600">{course.isindividual ? "Individual" : "Combined"}</p>
                         </div>
                         <div className="flex justify-between p-4 border-t">
                             <i className="fas fa-clipboard text-gray-600"></i>
@@ -69,8 +87,8 @@ export default function ProfessorDashBoard() {
                 ))}
             </div>
             {isAssignmentVisible && (
-                <div style={{boxShadow : "0px 0px 10px gray"}} className="secondSection fixed top-[15%] left-1/2 transform -translate-x-1/2 bg-white p-6 rounded-lg shadow-md">
-                    <CreateAssignment setAssignmentVisible={setAssignmentVisible} />
+                <div style={{ boxShadow: "0px 0px 10px gray" }} className="secondSection fixed top-[15%] left-1/2 transform -translate-x-1/2 bg-white p-6 rounded-lg shadow-md">
+                    <CreateAssignment setAssignmentVisible={setAssignmentVisible} setCourses={setCourses} />
                 </div>
             )}
         </main>

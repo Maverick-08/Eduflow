@@ -4,7 +4,7 @@ config();
 
 export const fetchClassRoomPhandler = async (req, res) => {
     const { email } = req.body;
-
+    console.log("email is :: ", email)
     try {
         const query = `
             SELECT c.*

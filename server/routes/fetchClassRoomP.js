@@ -3,6 +3,6 @@ import { fetchClassRoomPhandler } from "../controllers/fetchClassRoomPController
 
 const router = Router();
 
-router.get("/", fetchClassRoomPhandler);
+router.post("/", fetchClassRoomPhandler);
 
 export default router;

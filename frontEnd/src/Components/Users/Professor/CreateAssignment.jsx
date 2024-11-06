@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import conectjs from "../../../connect";
 
-export default function CreateAssignment({ setAssignmentVisible }) {
+export default function CreateAssignment({ setAssignmentVisible, setCourses }) {
   const [email, setEmail] = useState('');
   const [department, setDepartment] = useState('');
   const [course, setCourse] = useState('');
@@ -34,15 +34,22 @@ export default function CreateAssignment({ setAssignmentVisible }) {
       yearArra.push(year);
       const response = await axios.post(`${backEndLink}/createClassroom`, {
         email,
-        department : depArra,
-        course : courseArra,
-        year : yearArra,
+        department: depArra,
+        course: courseArra,
+        year: yearArra,
         isIndividual,
         subject_name: subject_name,
-      },{
-        withCredentials : true
+      }, {
+        withCredentials: true
       });
-
+      setCourses((prev) => [...prev, {
+        email,
+        department: depArra,
+        course: courseArra,
+        year: yearArra,
+        isIndividual,
+        subject_name: subject_name,
+      }])
       setSuccess('Classroom created successfully!');
       console.log(response.data); // Handle response as needed
       setAssignmentVisible(false);
