@@ -13,6 +13,7 @@ import fetchClassRoomP from "./routes/fetchClassRoomP.js";
 import fetchClassRoomS from "./routes/fetchClassroomofStudent.js";
 import fetchStudents from "./routes/fetchStudentsOfClass.js";
 import deleteClassroom from "./routes/deleteClassroom.js";
+import leaveClassroom from "./routes/leaveClassroom.js";
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use("/viewSubmissions",submissionlist)
 app.use("/fetchClassRoomP",fetchClassRoomP)
 app.use("/fetchClassRoomS",fetchClassRoomS)
 app.use("/deleteClassroom",deleteClassroom)
+app.use("/leaveClassroom",leaveClassroom)
 
 
 app.listen(3000, () => {
