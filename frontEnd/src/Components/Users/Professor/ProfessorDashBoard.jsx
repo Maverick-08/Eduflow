@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import CreateAssignment from './CreateAssignment';
 import axios from "axios";
 import connectJs from '../../../connect';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCopy, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function ProfessorDashBoard() {
     const [isAssignmentVisible, setAssignmentVisible] = useState(false);
@@ -21,6 +25,7 @@ export default function ProfessorDashBoard() {
                 setCourses(response.data);
             } catch (error) {
                 console.log("Error fetching courses:", error);
+                
             }
         };
         getClass();
@@ -36,7 +41,6 @@ export default function ProfessorDashBoard() {
 
     // Handle course deletion
     const handleDeleteCourse = async (class_id) => {
-        console.log("id :: " ,class_id);
         try {
             setCourses(courses.filter(course => course.class_id !== class_id));
             await axios.post(`${backEndLink}/deleteClassroom`, {
@@ -47,8 +51,18 @@ export default function ProfessorDashBoard() {
         }
     };
 
+    const copyCourseId = async (class_id) => {
+        try {
+            await navigator.clipboard.writeText(class_id);
+            toast.success("Course ID copied to clipboard!");
+        } catch (error) {
+            toast.error("Failed to copy Course ID.");
+        }
+    };
+
     return (
         <main className="flex-1 p-6" style={{ height: "100vh" }}>
+            <ToastContainer />
             <header className="flex items-center justify-start mb-6">
                 <h1 className="text-2xl font-semibold mr-6">Classes</h1>
                 <h1
@@ -74,12 +88,17 @@ export default function ProfessorDashBoard() {
                         <div onClick={() => handleClass(course.title)} className={`p-4 ${course.bgColor} text-black relative`}>
                             <h2 className="text-purple-600 text-lg font-semibold">Name: {course.subject_name}</h2>
                             {course.year && <p className="text-sm">Year: {course.year}</p>}
-                            <div className="absolute bottom-2 right-2">
-                                {course.image ? (
-                                    <img src={course.image} alt="Teacher" className="w-10 h-10 rounded-full" />
-                                ) : (
-                                    <div className="w-10 h-10 bg-purple-500 text-white rounded-full flex items-center justify-center">{course.initial}</div>
-                                )}
+                            <div className="absolute bottom-9 right-2">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        copyCourseId(course.class_id);
+                                    }}
+                                    className="text-purple-500 hover:text-blue-700"
+                                    title="Copy Course ID"
+                                >
+                                    <FontAwesomeIcon icon={faCopy} />
+                                </button>
                             </div>
                         </div>
                         <div className="p-4">
@@ -89,15 +108,11 @@ export default function ProfessorDashBoard() {
                         </div>
                         <div className="flex justify-between p-4 border-t">
                             <i className="fas fa-clipboard text-gray-600"></i>
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();  // Prevent navigation when clicking delete
-                                    handleDeleteCourse(course.class_id);
-                                }}
-                                className="text-red-500 hover:text-red-700"
-                            >
-                                Delete
-                            </button>
+
+                            <FontAwesomeIcon className='text-red-500 hover:text-red-700' onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteCourse(course.class_id);
+                            }} icon={faTrash} />
                         </div>
                     </div>
                 ))}
@@ -110,3 +125,4 @@ export default function ProfessorDashBoard() {
         </main>
     );
 }
+// Ksf6kCp

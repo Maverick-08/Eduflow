@@ -64,6 +64,24 @@ export default function Navbar() {
         }
     }
 
+
+    const handleNaviagtion = () => {
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        console.log(userInfo);
+        if (userInfo && userInfo.email) {
+            let email = userInfo.email;
+            if (email.includes("prof.manit.ac.in")) {
+                navigate("/professorView");
+            }
+            else {
+                navigate("/studentView");
+            }
+        }
+        else{
+            navigate("/login");
+        }
+    }
+
     return (
         <>
             <nav className="flex items-center justify-between p-4 border-b">
@@ -77,7 +95,7 @@ export default function Navbar() {
                 {
                     user.isAuthenticated ?
                         <section className='flex items-center justify-center space-x-4'>
-                            <p className='text-2x pr-4'>Welcome &nbsp;<span className='text-purple-600 font-medium cursor-pointer'>{user.fname}</span></p>
+                            <p onClick={handleNaviagtion} className='text-2x pr-4'>Welcome &nbsp;<span className='text-purple-600 font-medium cursor-pointer'>{user.fname}</span></p>
                             <button onClick={handleLogout} className='bg-purple-600 p-2 rounded-md text-white' >Logout</button>
                         </section>
                         :

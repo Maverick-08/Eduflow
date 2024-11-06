@@ -31,7 +31,7 @@ const Student = () => {
             }, { withCredentials: true });
 
             console.log("response is :: ", response);
-            navigate("/");
+            // navigate("/");
         }
         catch (error) {
             console.log("error", error);
