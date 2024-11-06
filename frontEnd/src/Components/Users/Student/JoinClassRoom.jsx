@@ -19,15 +19,15 @@ export default function JoinClassRoom({ setAssignmentVisible, setClasses }) {
         withCredentials: true
       })
       try {
-          let email = JSON.parse(localStorage.getItem("userInfo")).email;
-          let response = await axios.post(`${backEndLink}/fetchClassRoomS`, {
-            email
-          }, { withCredentials: true });
-          console.log("op :: ", response.data);
-          setClasses(response.data);
+        let email = JSON.parse(localStorage.getItem("userInfo")).email;
+        let response = await axios.post(`${backEndLink}/fetchClassRoomS`, {
+          email
+        }, { withCredentials: true });
+        console.log("op :: ", response.data);
+        setClasses(response.data);
       }
       catch (error) {
-          console.log("Error fetching classes:", error);
+        console.log("Error fetching classes:", error);
       }
       setAssignmentVisible(false);
       console.log(response);

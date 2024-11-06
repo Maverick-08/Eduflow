@@ -3,8 +3,8 @@ import { config } from "dotenv";
 config();
 
 export const fetchStudentsHandler = async (req, res) => {
-  const { class_id } = req.params;
-
+  const { class_id } = req.body;
+  console.log(class_id);
   try {
     const query = `
       SELECT CONCAT(s.fname, ' ', s.lname) AS name ,scholar_id

@@ -38,13 +38,13 @@ app.use("/createClassroom", createClassroom);
 app.use("/joinClassroom", joinClassroom);
 app.use("/uploadAssignment", uploadAssignment);
 app.use("/getPeople", fetchStudents);
-  
-app.use("/submitAssignment",submitAssignment)
-app.use("/viewSubmissions",submissionlist)
-app.use("/fetchClassRoomP",fetchClassRoomP)
-app.use("/fetchClassRoomS",fetchClassRoomS)
-app.use("/deleteClassroom",deleteClassroom)
-app.use("/leaveClassroom",leaveClassroom)
+
+app.use("/submitAssignment", submitAssignment)
+app.use("/viewSubmissions", submissionlist)
+app.use("/fetchClassRoomP", fetchClassRoomP)
+app.use("/fetchClassRoomS", fetchClassRoomS)
+app.use("/deleteClassroom", deleteClassroom)
+app.use("/leaveClassroom", leaveClassroom)
 
 
 app.listen(3000, () => {

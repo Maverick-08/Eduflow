@@ -31,8 +31,9 @@ export default function StudentDashboard() {
         getClass();
     }, []);
 
-    const handleClass = (title) => {
-        navigate("/ProfessorView/professorTask", { state: { classId: title } });
+    const handleClass = (class_id) => {
+        console.log("class_id is :: ", class_id);
+        navigate(`/StudentView/studentTasks/${class_id}`,);
     };
 
     const toggleAssignmentForm = () => {
@@ -45,7 +46,7 @@ export default function StudentDashboard() {
         try {
             setClasses(classes.filter(course => course.class_id !== class_id));
             await axios.post(`${backEndLink}/leaveClassroom`, {
-                classId : class_id , email
+                classId: class_id, email
             }, { withCredentials: true });
         } catch (error) {
             console.log("Error deleting course:", error);
@@ -74,22 +75,23 @@ export default function StudentDashboard() {
                 </h1>
             </header>
             {
-                classes.length==0 ?
+                classes.length == 0 ?
                     <>
-                    <h1>
-                        <center className='font-bold text-slate-700 text-xl '>No classes joined</center>
-                    </h1>
+                        <h1>
+                            <center className='font-bold text-slate-700 text-xl '>No classes joined</center>
+                        </h1>
                     </>
                     :
                     <div className="grid grid-cols-3 gap-6">
                         {
                             classes.map((course, index) => (
                                 <div
+                                    onClick={() => handleClass(course.class_id)}
                                     key={index}
                                     style={{ cursor: "pointer" }}
                                     className="bg-white rounded-lg shadow-md overflow-hidden"
                                 >
-                                    <div onClick={() => handleClass(course.title)} className={`p-4 ${course.bgColor} text-black relative`}>
+                                    <div className={`p-4 ${course.bgColor} text-black relative`}>
                                         <h2 className="text-purple-600 text-lg font-semibold">Class : {course.subject_name}</h2>
                                         {course.year && <p className="text-sm">Year: {course.year}</p>}
                                     </div>

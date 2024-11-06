@@ -7,11 +7,11 @@ export const leaveClassroomHandler = async (req, res) => {
 
     try {
         const query = `
-            UPDATE student
+            UPDATE student 
             SET class_id = array_remove(class_id, $2)
             WHERE email = $1
             RETURNING class_id;
-        `;
+        `; 
         
         const result = await Client.query(query, [email, classId]);
 
