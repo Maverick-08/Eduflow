@@ -11,6 +11,7 @@ import submitAssignment from "./routes/submitAssignment.js";
 import submissionlist from "./routes/submissionsList.js";
 import fetchClassRoomP from "./routes/fetchClassRoomP.js";
 import fetchStudents from "./routes/fetchStudentsOfClass.js";
+import deleteClassroom from "./routes/deleteClassroom.js";
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use("/getPeople", fetchStudents);
 app.use("/submitAssignment",submitAssignment)
 app.use("/viewSubmissions",submissionlist)
 app.use("/fetchClassRoomP",fetchClassRoomP)
+app.use("/deleteClassroom",deleteClassroom)
 
 
 app.listen(3000, () => {
