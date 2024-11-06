@@ -6,9 +6,7 @@ export const uploadAssignmentHandler = async (req, res) => {
     const files = req.files;
 
     // Ensure files are uploaded
-    if (!files || files.length === 0) {
-      return res.status(400).json({ msg: "No files uploaded" });
-    }
+
 
     // Ensure that a grade is selected or input manually
     if (!grade) {
