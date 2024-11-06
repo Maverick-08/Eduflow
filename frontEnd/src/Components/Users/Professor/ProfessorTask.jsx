@@ -4,11 +4,7 @@ import ProfessMaterial from './ProfessorMaterial/ProfessMaterial';
 import ProfessorAssignment from './ProfessorMaterial/ProfessorAssignment';
 import ProfessorStudents from './ProfessorMaterial/ProfessorStudents';
 import ProfessorStreams from './ProfessorMaterial/ProfessorStreams';
-<<<<<<< HEAD
 import AttendancePage from './ProfessorMaterial/AttendancePage';
-=======
-import Attendence from "./ProfessorMaterial/Attendence";
->>>>>>> 90b22b3e42be5629052219b229cf69b9b2980081
 
 export default function ProfessorTask() {
     const location = useLocation();
@@ -51,13 +47,8 @@ export default function ProfessorTask() {
                     Students
                 </div>
                 <div
-<<<<<<< HEAD
                     onClick={() => handleTabClick("attendancePage")}
                     className={`text-purple-600 cursor-pointer ${activeTab === "attendancePage" ? "border-b-2 border-purple-600 pb-1" : ""}`}
-=======
-                    onClick={() => handleTabClick("attendence")}
-                    className={`text-purple-600 cursor-pointer ${activeTab === "attendence" ? "border-b-2 border-purple-600 pb-1" : ""}`}
->>>>>>> 90b22b3e42be5629052219b229cf69b9b2980081
                 >
                     Attendence
                 </div>
@@ -68,11 +59,7 @@ export default function ProfessorTask() {
                 <Route path="/professorMaterial" element={<ProfessMaterial classId={classId} />} />
                 <Route path="/assignment" element={<ProfessorAssignment classId={classId} />} />
                 <Route path="/studentsInClass" element={<ProfessorStudents classId={classId} />} />
-<<<<<<< HEAD
                 <Route path="/attendancePage" element={<AttendancePage classId={classId} />} />
-=======
-                <Route path="/attendence" element={<Attendence classId={classId} />} />
->>>>>>> 90b22b3e42be5629052219b229cf69b9b2980081
             </Routes>
         </div>
     );
