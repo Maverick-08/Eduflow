@@ -40,11 +40,12 @@ export default function StudentDashboard() {
     };
 
     // Handle course deletion
-    const handleDeleteCourse = async (class_id) => {
+    const handleLeaveClass = async (class_id) => {
+        let email = JSON.parse(localStorage.getItem("userInfo")).email;
         try {
             setClasses(classes.filter(course => course.class_id !== class_id));
-            await axios.post(`${backEndLink}/deleteClassroom`, {
-                class_id
+            await axios.post(`${backEndLink}/leaveClassroom`, {
+                classId : class_id , email
             }, { withCredentials: true });
         } catch (error) {
             console.log("Error deleting course:", error);
@@ -99,7 +100,7 @@ export default function StudentDashboard() {
                                     <div className="flex justify-between p-4 border-t">
                                         <FontAwesomeIcon className='text-red-500 hover:text-red-700' onClick={(e) => {
                                             e.stopPropagation();
-                                            handleDeleteCourse(course.class_id);
+                                            handleLeaveClass(course.class_id);
                                         }} icon={faTrash} />
                                     </div>
                                 </div>
