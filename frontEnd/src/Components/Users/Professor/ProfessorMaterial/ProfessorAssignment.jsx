@@ -48,7 +48,7 @@ export default function ProfessorAssignment() {
                 <center>
                     <h1 style={{ fontSize: "40px" }}>
                         <b>
-                            Add Assignment
+                            Create Assignment
                         </b>
                     </h1>
                 </center>
