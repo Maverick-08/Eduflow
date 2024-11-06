@@ -12,6 +12,7 @@ export const uploadAssignmentHandler = async (req, res) => {
       const assignment_id = `ASSIGN-${Date.now()}-${Math.floor(
         Math.random() * 1000
       )}`;
+    
       return Client.query(
         "INSERT INTO assignment (assignment_id, documentFile, class_id, deadline, title, instruction) VALUES ($1, $2, $3, $4, $5, $6)",
         [assignment_id, file.path, class_id, deadline, title, instruction]

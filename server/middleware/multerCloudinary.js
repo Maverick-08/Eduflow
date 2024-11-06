@@ -1,30 +1,24 @@
-import { CloudinaryStorage } from "multer-storage-cloudinary";
 import multer from "multer";
 import path from "path";
-import cloudinary from "../config/cloudinaryConfig.js";
 
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: async (req, file) => {
-    const format = file.mimetype.split("/")[1];
-    
-    return {
-      folder: "assignments",
-      format: format,
-      public_id: `${Date.now()}-${file.originalname}`, // Fixed template literal
-    };
+// Set up local file storage configuration
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    // Define the folder where files should be saved
+    callback(null, "uploads/assignments");
   },
   filename: (req, file, callback) => {
     console.log(file);
     const ogName = file.originalname;
-    const exte = path.extname(ogName);
-    const fileName = ogName.replace(exte, "");
+    const ext = path.extname(ogName);
+    const fileName = ogName.replace(ext, "");
     const compFileName = fileName.split(" ").join("_");
-    const lcFileName = compFileName.toLowerCase() + exte; // Changed toLowerCase
+    const lcFileName = compFileName.toLowerCase() + ext; // Changed toLowerCase
     callback(null, lcFileName);
   },
 });
 
+// Initialize multer with storage configuration and file type validation
 const upload = multer({
   storage,
   fileFilter: (req, file, callback) => {
