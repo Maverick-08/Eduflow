@@ -58,12 +58,7 @@ export default function ProfessorAssignment() {
                 }
             });
             
-            if (response.status === 200) {
-                toast.success("Assignment uploaded successfully!");
-                console.log(response.data);
-            } else {
-                setError(response.data.msg || "Failed to upload assignment");
-            }
+            toast.success("Assignment uploaded successfully!");
         } catch (err) {
             console.error("Error uploading assignment:", err);
             setError("An error occurred while uploading the assignment. Please try again.");

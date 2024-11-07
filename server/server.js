@@ -14,6 +14,14 @@ import fetchClassRoomS from "./routes/fetchClassroomofStudent.js";
 import fetchStudents from "./routes/fetchStudentsOfClass.js";
 import deleteClassroom from "./routes/deleteClassroom.js";
 import leaveClassroom from "./routes/leaveClassroom.js";
+import getUploadedAssignment from "./routes/getUploadedAssignment.js"
+
+
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -37,7 +45,7 @@ app.use("/logout", Logout);
 app.use("/createClassroom", createClassroom);
 app.use("/joinClassroom", joinClassroom);
 app.use("/uploadAssignment", uploadAssignment);
-app.get("/uploadedAssignment",uploadAssignment)
+app.use("/uploadedAssignment", getUploadedAssignment)
 
 app.use("/getPeople", fetchStudents);
 
@@ -48,6 +56,7 @@ app.use("/fetchClassRoomS", fetchClassRoomS)
 app.use("/deleteClassroom", deleteClassroom)
 app.use("/leaveClassroom", leaveClassroom)
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(3000, () => {
   console.log("Server is running 3000");
