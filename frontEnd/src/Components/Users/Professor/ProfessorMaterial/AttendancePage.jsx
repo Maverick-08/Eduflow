@@ -1,11 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
+import axios from 'axios'; // Ensure axios is imported
 
 export default function AttendancePage() {
-    const students = ["John Doe", "Jane Smith", "Alice Johnson", "Bob Brown"]; // Sample student list
-    const [attendance, setAttendance] = useState(
-        students.reduce((acc, student) => ({ ...acc, [student]: null }), {})
-    );
+    const [attendance, setAttendance] = useState({});
+    const [students, setStudents] = useState([]); // This will store the fetched students
+
+    useEffect(() => {
+        const getStudents = async () => {
+            const path = window.location.pathname;
+            const classString = path.split("/");
+            const classID = classString[classString.length - 1];
+            const { backEndLink } = connectJs;
+            console.log(classID);
+            try {
+                let response = await axios.post(`${backEndLink}/getPeople`, { class_id: classID }, {
+                    withCredentials: true
+                })
+                console.log(response);
+                const studentList = response.data.students;
+                setStudents(studentList);
+                setAttendance(studentList.reduce((acc, student) => ({ ...acc, [student]: null }), {}));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getStudents();
+    }, []);
 
     const handleAttendanceChange = (student, status) => {
         setAttendance((prev) => ({ ...prev, [student]: status }));
