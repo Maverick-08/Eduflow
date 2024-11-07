@@ -109,6 +109,7 @@ export default function StudentDashboard() {
                             ))}
                     </div>
             }
+            
             {isAssignmentVisible && (
                 <div style={{ boxShadow: "0px 0px 10px gray" }} className="secondSection fixed top-[15%] left-1/2 transform -translate-x-1/2 bg-white p-6 rounded-lg shadow-md">
                     <JoinClassRoom setAssignmentVisible={setAssignmentVisible} setClasses={setClasses} />
