@@ -57,6 +57,7 @@ export default function Navbar() {
             });
             console.log(response);
             localStorage.clear();
+            navigate("/");
             window.location.reload();
         }
         catch(error){

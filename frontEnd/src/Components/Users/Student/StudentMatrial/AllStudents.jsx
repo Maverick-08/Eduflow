@@ -30,7 +30,7 @@ export default function AllStudents() {
             <div>
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-bold">Classmates</h2>
-                    <span className="text-gray-600">{student && student.length ? student.length : ""} Studnets</span>
+                    <span className="text-gray-600">{student && student.length ? student.length : ""} Students</span>
                 </div>
                 <ul className="space-y-4">
                     {
@@ -38,10 +38,13 @@ export default function AllStudents() {
                         <div>
                             {
                                 student.map((student, index) => (
+                                    <>
                                     <li key={index} className="flex items-center space-x-4">
                                         <img src={image} alt={`Profile picture of ${student.name}`} className="w-10 h-10 rounded-full" />
                                         <span>{student.name}</span>
                                     </li>
+                                    <br />
+                                    </>
                                 ))
                             }
                         </div>

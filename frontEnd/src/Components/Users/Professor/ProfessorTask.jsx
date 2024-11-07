@@ -7,16 +7,17 @@ import ProfessorStreams from './ProfessorMaterial/ProfessorStreams';
 import AttendancePage from './ProfessorMaterial/AttendancePage';
 
 export default function ProfessorTask() {
-    const location = useLocation();
     const navigate = useNavigate();
-    const { classId } = location.state || {}; // Retrieve classId from location.state
 
-    console.log("class id :: ", classId);
     const [activeTab, setActiveTab] = useState("stream");
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
-        navigate(`/ProfessorView/professorTask/${tab}`, { state: { classId } });
+        const path = window.location.pathname;
+        const classString = path.split("/");
+        const classID = classString[classString.length - 1];
+        const newPath = tab ? `/ProfessorView/professorTask/${tab}/${classID}` : `/ProfessorView/professorTask/${classID}`;
+        navigate(newPath);
     };
 
     return (
@@ -55,11 +56,11 @@ export default function ProfessorTask() {
             </nav>
 
             <Routes>
-                <Route path="/" element={<ProfessorStreams classId={classId} />} />
-                <Route path="/professorMaterial" element={<ProfessMaterial classId={classId} />} />
-                <Route path="/assignment" element={<ProfessorAssignment classId={classId} />} />
-                <Route path="/studentsInClass" element={<ProfessorStudents classId={classId} />} />
-                <Route path="/attendancePage" element={<AttendancePage classId={classId} />} />
+                <Route path="/:id" element={<ProfessorStreams />} />
+                <Route path="/professorMaterial/:id" element={<ProfessMaterial />} />
+                <Route path="/assignment/:id" element={<ProfessorAssignment />} />
+                <Route path="/studentsInClass/:id" element={<ProfessorStudents />} />
+                <Route path="/attendancePage/:id" element={<AttendancePage />} />
             </Routes>
         </div>
     );

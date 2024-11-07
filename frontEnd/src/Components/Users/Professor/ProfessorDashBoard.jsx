@@ -31,8 +31,9 @@ export default function ProfessorDashBoard() {
         getClass();
     }, []);
 
-    const handleClass = (title) => {
-        navigate("/ProfessorView/professorTask", { state: { classId: title } });
+    const handleClass = (class_id) => {
+        console.log(class_id);
+        navigate(`/ProfessorView/professorTask/${class_id}`);
     };
 
     const toggleAssignmentForm = () => {
@@ -85,7 +86,7 @@ export default function ProfessorDashBoard() {
                         style={{ cursor: "pointer" }}
                         className="bg-white rounded-lg shadow-md overflow-hidden"
                     >
-                        <div onClick={() => handleClass(course.title)} className={`p-4 ${course.bgColor} text-black relative`}>
+                        <div onClick={() => handleClass(course.class_id)} className={`p-4 ${course.bgColor} text-black relative`}>
                             <h2 className="text-purple-600 text-lg font-semibold">Name: {course.subject_name}</h2>
                             {course.year && <p className="text-sm">Year: {course.year}</p>}
                             <div className="absolute bottom-9 right-2">
