@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from "axios";
+import { toast, ToastContainer} from "react-toastify"
 
 export default function ProfessorAssignment() {
     const [title, setTitle] = useState('');
@@ -9,6 +11,7 @@ export default function ProfessorAssignment() {
     const [dueDate, setDueDate] = useState(''); // New state for due date value
     const [pdfDocument, setPdfDocument] = useState(null);
     const [error, setError] = useState('');
+
 
     const handleTitleChange = (e) => setTitle(e.target.value);
     const handleGradeChange = (e) => {
@@ -24,27 +27,55 @@ export default function ProfessorAssignment() {
     const handleDueDateChange = (e) => setDueDate(e.target.value); // Handle due date change
     const handlePdfDocumentChange = (e) => setPdfDocument(e.target.files[0]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Validation: Check that title, grade, instructions, due date, and at least one file (PDF) is filled
+    
+        const path = window.location.pathname;
+        const classString = path.split("/");
+        const classID = classString[classString.length - 1];
+    
+        // Validation: Check that all required fields are filled in
         if (!title || !grade || (grade === 'select' && !manualGrade) || !instructions || (dueDateOption === 'calendar' && !dueDate) || !pdfDocument) {
             setError('Please fill in all fields and upload a PDF document.');
             return;
         }
         setError(''); // Clear error if validation passes
-
-        // Handle form submission
-        console.log('Title:', title);
-        console.log('Grade:', grade === 'select' ? manualGrade : grade);
-        console.log('Instructions:', instructions);
-        console.log('Due Date Option:', dueDateOption);
-        console.log('Due Date:', dueDate); // Log due date
-        console.log('PDF Document:', pdfDocument);
+    
+        // Create FormData object to send data and file
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("grade", grade === 'select' ? manualGrade : grade);
+        formData.append("instruction", instructions);
+        formData.append("deadline", dueDateOption === 'calendar' ? dueDate : null);
+        formData.append("class_id", classID); // Attach the class ID
+        formData.append("pdfDocument", pdfDocument); // Attach PDF file
+    
+        try {
+            const response = await axios.post('http://localhost:3000/uploadAssignment', formData, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'multipart/form-data' // Set header for file upload
+                }
+            });
+            
+            if (response.status === 200) {
+                toast.success("Assignment uploaded successfully!");
+                console.log(response.data);
+            } else {
+                setError(response.data.msg || "Failed to upload assignment");
+            }
+        } catch (err) {
+            console.error("Error uploading assignment:", err);
+            setError("An error occurred while uploading the assignment. Please try again.");
+        }
     };
+    
+    
 
     return (
         <>
             <main>
+                <ToastContainer/>
                 <center>
                     <h1 style={{ fontSize: "40px" }}>
                         <b>

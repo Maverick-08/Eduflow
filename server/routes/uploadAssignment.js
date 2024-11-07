@@ -4,6 +4,7 @@ import upload from "../middleware/multerCloudinary.js";
 
 const router = Router();
 
-router.post("/", upload.array("image", 3), uploadAssignmentHandler);
+router.post("/", upload.single('pdfDocument') , uploadAssignmentHandler);
 
 export default router;
+  
