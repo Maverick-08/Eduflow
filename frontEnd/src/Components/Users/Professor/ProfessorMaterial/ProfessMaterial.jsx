@@ -1,31 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom"
 
 export default function ProfessMaterial() {
-    const [title, setTitle] = useState('');
-    const [instructions, setInstructions] = useState('');
+    const [title, setTitle] = useState("");
+    const [instructions, setInstructions] = useState("");
     const [pdfDocument, setPdfDocument] = useState(null);
-    const [error, setError] = useState('');
+    const [error, setError] = useState("");
 
     const handleTitleChange = (e) => setTitle(e.target.value);
     const handleInstructionsChange = (e) => setInstructions(e.target.value);
     const handlePdfDocumentChange = (e) => setPdfDocument(e.target.files[0]);
 
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const path = window.location.pathname;
+        const classString = path.split("/");
+        const classID = classString[classString.length - 1];
+
         if (!title || !instructions || !pdfDocument) {
-            setError('Please fill in all fields and upload a PDF document.');
+            setError("Please fill in all fields and upload a PDF document.");
             return;
         }
-        setError('');
+        setError("");
 
-        console.log('Title:', title);
-        console.log('Instructions:', instructions);
-        console.log('PDF Document:', pdfDocument);
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("instructions", instructions);
+        formData.append("pdfDocument", pdfDocument);
+        formData.append("classID", classID);
+
+        try {
+            const response = await axios.post(
+                "http://localhost:3000/uploadMaterial",
+                formData,
+                {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+
+            toast.success("Material uploaded successfully!");
+            // navigate(`ProfessorView/professorTask/${classID}`)
+        } 
+        catch (err) {
+            console.error("Error uploading material:", err);
+            setError("An error occurred while uploading the material. Please try again.");
+        }
     };
 
     return (
         <>
             <main className="flex justify-center items-top bg-gray-50 p-3">
+                <ToastContainer />
                 <div className="w-full max-w-lg bg-white rounded-lg shadow-lg p-8">
                     <center>
                         <h1 className="text-3xl font-bold text-blue-700 mb-6">

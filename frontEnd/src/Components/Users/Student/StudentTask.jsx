@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Streams from "./StudentMatrial/Streams";
-import Assignments from "./StudentMatrial/Assignments";
 import Attendence from "./StudentMatrial/Attendence";
 import AllStudents from "./StudentMatrial/AllStudents";
 
@@ -30,15 +29,7 @@ export default function StudentTask() {
             activeTab === "" ? "border-b-2 border-blue-600 pb-1" : ""
           }`}
         >
-          Material
-        </div>
-        <div
-          onClick={() => handleTabClick("assignment")}
-          className={`text-blue-700 cursor-pointer ${
-            activeTab === "assignment" ? "border-b-2 border-blue-600 pb-1" : ""
-          }`}
-        >
-          Assignment
+          Stream
         </div>
         <div
           onClick={() => handleTabClick("attendence")}
@@ -61,7 +52,6 @@ export default function StudentTask() {
       <Routes>
         {/* Define the updated routes to match paths */}
         <Route path="/:id" element={<Streams />} />
-        <Route path="/assignment/:id" element={<Assignments />} />
         <Route path="/attendence/:id" element={<Attendence />} />
         <Route path="/allStudents/:id" element={<AllStudents />} />
       </Routes>

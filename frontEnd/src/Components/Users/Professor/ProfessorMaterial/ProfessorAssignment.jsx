@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom"
 
 export default function ProfessorAssignment() {
   const [title, setTitle] = useState("");
@@ -11,6 +12,8 @@ export default function ProfessorAssignment() {
   const [dueDate, setDueDate] = useState("");
   const [pdfDocument, setPdfDocument] = useState(null);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleGradeChange = (e) => {
@@ -65,9 +68,10 @@ export default function ProfessorAssignment() {
           },
         }
       );
-
       toast.success("Assignment uploaded successfully!");
-    } catch (err) {
+      // navigate(`/${classID}`)
+    } 
+    catch (err) {
       console.error("Error uploading assignment:", err);
       setError(
         "An error occurred while uploading the assignment. Please try again."
