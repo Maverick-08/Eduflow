@@ -7,9 +7,10 @@ export const fetchStudentsHandler = async (req, res) => {
   console.log(class_id);
   try {
     const query = `
-      SELECT CONCAT(s.fname, ' ', s.lname) AS name ,scholar_id
+      SELECT CONCAT(s.fname, ' ', s.lname) AS name, scholar_id
       FROM student s
-      WHERE $1 = ANY(s.class_id); 
+      WHERE $1 = ANY(s.class_id)
+      ORDER BY scholar_id; -- Sort by scholar_id in ascending order
     `;
 
     const { rows } = await Client.query(query, [class_id]);

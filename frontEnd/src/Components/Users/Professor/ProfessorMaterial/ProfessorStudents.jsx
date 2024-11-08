@@ -41,7 +41,7 @@ export default function ProfessorStudents() {
                                     <>
                                     <li key={index} className="flex items-center space-x-4">
                                         <img src={image} alt={`Profile picture of ${student.name}`} className="w-10 h-10 rounded-full" />
-                                        <span>{student.name}</span>
+                                        {student.name + " (" + student.scholar_id + ")"}
                                     </li>
                                     <br />
                                     </>
