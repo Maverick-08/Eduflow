@@ -42,21 +42,20 @@ export default function AttendancePage() {
     const path = window.location.pathname;
     const classString = path.split("/");
     const classID = classString[classString.length - 1];
-    const attendance_date = new Date().toLocaleDateString("en-CA"); // Format as YYYY-MM-DD for PostgreSQL
+    const attendance_date = new Date().toLocaleDateString("en-CA");
 
     const attendanceStatus = Object.entries(attendance).map(([scholar_id, status]) => ({
       scholar_id,
-      status: status === "present", // true if "present", false otherwise
+      status: status === "present",
     }));
 
     try {
-      const response = await axios.post("http://localhost:3000/markAttendance", {
+      await axios.post("http://localhost:3000/markAttendance", {
         class_id: classID,
         attendance_date,
         attendanceStatus,
       });
       alert(`Attendance submitted successfully for ${attendance_date}`);
-      console.log(response.data);
     } catch (error) {
       console.error("Error submitting attendance:", error);
     }
@@ -78,59 +77,55 @@ export default function AttendancePage() {
   };
 
   return (
-    <main className="flex-1 p-6" style={{ height: "100vh" }}>
-      <header className="flex items-center justify-start mb-6">
-        <h1 className="text-2xl font-semibold text-blue-500">Attendance</h1>
+    <main className="flex-1 p-6 bg-gray-50 min-h-screen">
+      <header className="mb-8 text-center">
+        <h1 className="text-3xl font-bold text-blue-600">Attendance Management</h1>
       </header>
-      <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="bg-white p-6 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 gap-4">
           {students.map((student) => (
             <div
               key={student.scholar_id}
-              className="flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow-sm"
+              className="flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow-sm transition-transform hover:scale-105"
             >
-              <span className="text-lg font-medium text-gray-800">
-                {student.name + " (" + student.scholar_id + ")"}
+              <span className="text-lg font-semibold text-gray-800">
+                {student.name} <span className="text-gray-500">({student.scholar_id})</span>
               </span>
               <div className="flex space-x-4">
                 <button
                   onClick={() => handleAttendanceChange(student, "present")}
-                  className={`w-10 h-10 flex items-center justify-center rounded-lg ${
+                  className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${
                     attendance[student.scholar_id] === "present"
-                      ? "bg-green-500"
-                      : "border-2 border-gray-300"
+                      ? "bg-green-500 text-white"
+                      : "border-2 border-gray-300 text-gray-500"
                   }`}
                 >
-                  {attendance[student.scholar_id] === "present" && (
-                    <span className="text-white font-bold text-xl">✓</span>
-                  )}
+                  ✓
                 </button>
                 <button
                   onClick={() => handleAttendanceChange(student, "absent")}
-                  className={`w-10 h-10 flex items-center justify-center rounded-lg ${
+                  className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${
                     attendance[student.scholar_id] === "absent"
-                      ? "bg-red-500"
-                      : "border-2 border-gray-300"
+                      ? "bg-red-500 text-white"
+                      : "border-2 border-gray-300 text-gray-500"
                   }`}
                 >
-                  {attendance[student.scholar_id] === "absent" && (
-                    <span className="text-white font-bold text-xl">✗</span>
-                  )}
+                  ✗
                 </button>
               </div>
             </div>
           ))}
         </div>
-        <div className="mt-6 flex justify-between">
+        <div className="mt-8 flex justify-center gap-4">
           <button
             onClick={handleSubmit}
-            className="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-blue-600"
+            className="bg-blue-500 text-white px-8 py-3 rounded-lg font-semibold shadow-md hover:bg-blue-600 transition-transform hover:scale-105"
           >
             Submit Attendance
           </button>
           <button
             onClick={exportToExcel}
-            className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-green-600"
+            className="bg-green-500 text-white px-8 py-3 rounded-lg font-semibold shadow-md hover:bg-green-600 transition-transform hover:scale-105"
           >
             Export to Excel
           </button>
