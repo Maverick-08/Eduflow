@@ -16,6 +16,7 @@ import fetchStudents from "./routes/fetchStudentsOfClass.js";
 import deleteClassroom from "./routes/deleteClassroom.js";
 import leaveClassroom from "./routes/leaveClassroom.js";
 import getUploadedAssignment from "./routes/getUploadedAssignment.js"
+import getUploadedMaterial from "./routes/getUploadedMaterial.js"
 import markAttendance from "./routes/markAttendance.js"
 import fetchAttendacneByClass from "./routes/fetchAttendacneByClass.js"
 
@@ -50,6 +51,7 @@ app.use("/joinClassroom", joinClassroom);
 app.use("/uploadAssignment", uploadAssignment);
 app.use("/uploadMaterial", uploadMaterial);
 app.use("/uploadedAssignment", getUploadedAssignment)
+app.use("/getUploadedMaterial", getUploadedMaterial)
   
 app.use("/getPeople", fetchStudents);
 
