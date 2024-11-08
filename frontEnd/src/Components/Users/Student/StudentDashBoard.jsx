@@ -32,8 +32,8 @@ export default function StudentDashboard() {
     getClass();
   }, []);
 
-  const handleClass = (class_id, subject_name) => {
-    sessionStorage.setItem("currentSubject", subject_name);
+  const handleClass = (class_id, subject_name , professor_name) => {
+    sessionStorage.setItem("studentClassInfo", JSON.stringify({class_id, subject_name , professor_name}));
     navigate(`/StudentView/studentTasks/${class_id}`);
   };
 
@@ -79,7 +79,7 @@ export default function StudentDashboard() {
             <div
               style={{ boxShadow: "0px 0px 10px gray" }}
               key={index}
-              onClick={() => handleClass(course.class_id, course.subject_name)}
+              onClick={() => handleClass(course.class_id, course.subject_name , course.professor_name)}
               className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300 cursor-pointer"
             >
               <div
