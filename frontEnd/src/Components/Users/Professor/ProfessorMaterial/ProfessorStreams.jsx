@@ -68,7 +68,7 @@ export default function ProfessorStreams() {
         </div>
         <div>
           <i style={{ fontSize: "60px" }} class="fa-brands fa-google-scholar"></i>
-        </div>
+        </div> 
       </header>
 
       <div className="flex p-6">

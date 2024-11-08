@@ -1,30 +1,20 @@
-import React from "react";
+import React , { useState } from "react";
 
 export default function Streams() {
+  const [studentClassInfo , useStudentClassInfo] = useState(JSON.parse(sessionStorage.getItem("studentClassInfo")));
   return (
     <>
       <div className="bg-white shadow rounded-lg overflow-hidden">
-        <div className="bg-gray-700 text-white p-6 flex items-center justify-between">
+        <div className="bg-blue-600 text-white p-6 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Machine Learning (Theory)</h1>
-            <p className="text-lg">2020-2023</p>
+            <h1 className="text-2xl font-bold">{studentClassInfo.subject_name}</h1>
+            <p className="text-lg">Professor {studentClassInfo.professor_name}</p>
           </div>
-          <img
-            src="https://placehold.co/100x100"
-            alt="Illustration of a book, glasses, and a newspaper"
-            className="w-24 h-24"
-          />
+          <div>
+          <i style={{ fontSize: "60px" }} class=" bg-white p-3 rounded-full text-blue-500 fa-brands fa-google-scholar"></i>
+        </div>
         </div>
         <div className="p-4 flex space-x-4">
-          <div className="w-1/4">
-            <div className="bg-white shadow rounded-lg p-4">
-              <h2 className="font-medium mb-2">Upcoming</h2>
-              <p className="text-blue-700">Woohoo, no work due soon!</p>
-              <a href="#" className="text-blue-700 mt-2 inline-block">
-                View all
-              </a>
-            </div>
-          </div>
           <div className="w-3/4">
             <div className="bg-white shadow rounded-lg p-4 mb-4">
               <div className="flex items-center space-x-2">
