@@ -25,7 +25,7 @@ export default function ProfessMaterial() {
 
     return (
         <>
-            <main className="flex justify-center items-center min-h-screen bg-gray-100 p-6">
+            <main className="flex justify-center items-center min-h-screen bg-gray-50 p-6">
                 <div className="w-full max-w-lg bg-white rounded-lg shadow-lg p-8">
                     <center>
                         <h1 className="text-3xl font-bold text-blue-700 mb-6">

@@ -81,7 +81,7 @@ export default function Navbar() {
     <>
       <nav className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center space-x-2">
-          <div className="bg-purple-600 text-white p-2 rounded"></div>
+          <div className="bg-blue-700 text-white p-2 rounded"></div>
           <span
             onClick={handleNaviagtion}
             className="cursor-pointer text-xl font-bold"
@@ -93,13 +93,13 @@ export default function Navbar() {
           <section className="flex items-center justify-center space-x-4">
             <p onClick={handleNaviagtion} className="text-2x pr-4">
               Welcome &nbsp;
-              <span className="text-purple-600 font-medium cursor-pointer">
+              <span className="text-blue-700 font-medium cursor-pointer">
                 {user.fname}
               </span>
             </p>
             <button
               onClick={handleLogout}
-              className="bg-purple-600 p-2 rounded-md text-white"
+              className="bg-blue-700 p-2 rounded-md text-white"
             >
               Logout
             </button>
@@ -116,7 +116,7 @@ export default function Navbar() {
             </button>
             <button
               onClick={handleSignupClick}
-              className="bg-purple-600 text-white px-3 py-1 rounded"
+              className="bg-blue-700 text-white px-3 py-1 rounded"
             >
               Sign Up
             </button>
