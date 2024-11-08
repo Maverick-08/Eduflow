@@ -34,7 +34,7 @@ export default function ProfessorStudents() {
                 {student && student.length ? (
                     student.map((student, index) => (
                         <li key={index} className="flex items-center p-4 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition duration-200 ease-in-out">
-                            <img src={image} alt={`Profile picture of ${student.name}`} className="w-12 h-12 rounded-full mr-4 border border-gray-300" />
+                            <i class="rounded-full mr-4 border p-3 text-green-500 border-gray-300 fa-brands fa-google-scholar"></i>
                             <div>
                                 <h3 className="text-lg font-medium text-gray-700">{student.name}</h3>
                                 <p className="text-sm text-gray-500">SCHOLAR ID: {student.scholar_id}</p>

@@ -3,6 +3,6 @@ import { fetchStudentsHandler } from "../controllers/fetchStudentsController.js"
 
 const router = Router();
 
-router.post("/", fetchStudentsHandler);
+router.post("/", fetchStudentsHandler); 
  
 export default router;

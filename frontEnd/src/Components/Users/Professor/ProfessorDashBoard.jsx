@@ -26,6 +26,7 @@ export default function ProfessorDashBoard() {
           { withCredentials: true }
         );
         setCourses(response.data);
+        console.log("course array :: ",response.data);
       } catch (error) {
         console.log("Error fetching courses:", error);
       }
@@ -33,7 +34,8 @@ export default function ProfessorDashBoard() {
     getClass();
   }, []);
 
-  const handleClass = (class_id) => {
+  const handleClass = (class_id , subject_name) => {
+    sessionStorage.setItem("currentSubject" , subject_name);
     navigate(`/ProfessorView/professorTask/${class_id}`);
   };
 
@@ -59,7 +61,7 @@ export default function ProfessorDashBoard() {
   const copyCourseId = async (class_id) => {
     try {
       await navigator.clipboard.writeText(class_id);
-      toast.success("Course ID copied to clipboard!");
+      toast.success(`Course ID - (${class_id}) copied to clipboard!`, { autoClose: 1500 });
     } catch (error) {
       toast.error("Failed to copy Course ID.");
     }
@@ -81,8 +83,9 @@ export default function ProfessorDashBoard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {courses.map((course, index) => (
           <div
+            style={{ boxShadow: "0px 0px 10px gray" }}
             key={index}
-            onClick={() => handleClass(course.class_id)}
+            onClick={() => handleClass(course.class_id, course.subject_name)}
             className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300 cursor-pointer"
           >
             <div
@@ -142,9 +145,8 @@ export default function ProfessorDashBoard() {
         </div>
       )}
       <div
-        className={`${
-          isAssignmentVisible ? "block" : "hidden"
-        } fixed inset-0 bg-black opacity-30`}
+        className={`${isAssignmentVisible ? "block" : "hidden"
+          } fixed inset-0 bg-black opacity-30`}
         onClick={toggleAssignmentForm}
       ></div>
     </main>

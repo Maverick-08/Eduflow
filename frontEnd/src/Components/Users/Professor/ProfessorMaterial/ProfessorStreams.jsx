@@ -8,6 +8,9 @@ export default function ProfessorStreams() {
 
   // Array of streams
   const [streams, setStream] = useState([]);
+  const [localData  , setLocalData] = useState(JSON.parse(localStorage.getItem("userInfo")));
+  const [currentSubject, setcurrentSubject] = useState((sessionStorage.getItem("currentSubject")));
+  const [teacherName, setteacherName] = useState(JSON.parse(localStorage.getItem("userInfo")).fname + JSON.parse(localStorage.getItem("userInfo")).lname)
   useEffect(() => {
     const getStreams = async () => {
       const { backEndLink } = connectJs;
@@ -60,14 +63,12 @@ export default function ProfessorStreams() {
     <div>
       <header className="bg-blue-600 text-white p-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">AI Practical Group A</h1>
-          <p className="text-lg">2020-2023</p>
+          <h1 className="text-2xl font-bold">{currentSubject}</h1>
+          <p className="text-lg">Professor {teacherName}</p>
         </div>
-        <img
-          src="https://placehold.co/100x100"
-          alt="Illustration of books and headphones"
-          className="w-24 h-24"
-        />
+        <div>
+          <i style={{ fontSize: "60px" }} class="fa-brands fa-google-scholar"></i>
+        </div>
       </header>
 
       <div className="flex p-6">
@@ -76,17 +77,16 @@ export default function ProfessorStreams() {
             <div
               key={index}
               className="bg-white p-4 rounded-lg shadow-md mb-4 cursor-pointer"
-
             >
               <div className="flex items-center mb-2">
                 <i className="fas fa-file-alt text-blue-600"></i>
                 <p onClick={() => {
                   navigate('/new-route', { state: { someData: assignment.stateData } });
-                }} className="ml-2 font-bold">{assignment.title}</p>
+                }} className="ml-2 font-bold">Professor {teacherName} posted assignment : {assignment.title}</p>
               </div>
               <p className="text-gray-500">Deadline <b>{formatDateToReadable(assignment.deadline)}</b></p>
               <p className="text-gray-500">Instructions <b>{assignment.instruction}</b></p>
-              <button onClick={handleDownload}>Download Assignment</button>
+              <button onClick={handleDownload}><i class=" text-green-500 fa-solid fa-download"></i> Download </button>
             </div>
           ))}
         </main>
