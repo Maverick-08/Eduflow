@@ -79,9 +79,9 @@ const StudentAttendance = () => {
       console.log("response is ->>>>>>>>>>>>>>>>>>>>> ", response.data.attendance);;
       let p = 0;
       response.data.attendance.map((e) => {
-        e ? p += 1 : p
+        e.status ? p += 1 : p
       })
-      let percentage = (p/response.data.attendance.length)*100;
+      let percentage = ((p / response.data.attendance.length) * 100).toFixed(2);
       setattendencePercentage(percentage);
       setAttendanceRecord(response.data.attendance);
     }

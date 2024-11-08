@@ -35,6 +35,7 @@ app.use(
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -52,6 +53,7 @@ app.use("/uploadAssignment", uploadAssignment);
 app.use("/uploadMaterial", uploadMaterial);
 app.use("/uploadedAssignment", getUploadedAssignment)
 app.use("/getUploadedMaterial", getUploadedMaterial)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
   
 app.use("/getPeople", fetchStudents);
 
@@ -65,6 +67,24 @@ app.use("/markAttendance", markAttendance)
 app.use("/fetchAttendacneByClass", fetchAttendacneByClass)
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.get('uploads/assignment/:fileName', (req, res) => {
+  const { fileName } = req.params;
+
+  // Construct the document URL
+  const documentUrl = `/uploads/assignments/${fileName}`;
+
+  // You can return other details like instructions, grade, etc.
+  const assignmentDetails = {
+    title: 'Assignment Title',
+    instruction: 'Please follow the instructions carefully.',
+    grade: 'A+',
+    deadline: '2024-11-19T18:30:00.000Z',
+    documentUrl: documentUrl,
+  };
+
+  res.json(assignmentDetails);
+});
 
 app.listen(3000, () => {
   console.log("Server is running 3000");
