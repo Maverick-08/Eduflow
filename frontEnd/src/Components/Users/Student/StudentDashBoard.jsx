@@ -55,14 +55,6 @@ export default function StudentDashboard() {
     }
   };
 
-  const copyCourseId = async (class_id) => {
-    try {
-      await navigator.clipboard.writeText(class_id);
-      toast.success(`Course ID - (${class_id}) copied to clipboard!`, { autoClose: 1500 });
-    } catch (error) {
-      toast.error("Failed to copy Course ID.");
-    }
-  };
 
   return (
     <main className="flex-1 p-6 bg-gray-100" style={{ minHeight: "100vh" }}>
@@ -110,16 +102,7 @@ export default function StudentDashboard() {
                 </p>
               </div>
               <div className="flex justify-between p-4 border-t bg-gray-50">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    copyCourseId(course.class_id);
-                  }}
-                  className="text-blue-500 hover:text-blue-700 transition duration-200"
-                  title="Copy Course ID"
-                >
-                  <FontAwesomeIcon icon={faCopy} />
-                </button>
+          
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
