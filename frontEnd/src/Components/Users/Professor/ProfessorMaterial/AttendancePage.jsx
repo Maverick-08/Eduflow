@@ -61,6 +61,7 @@ export default function AttendancePage() {
     }
   };
 
+
   const exportToExcel = () => {
     const today = new Date().toLocaleDateString();
     const attendanceData = Object.entries(attendance).map(

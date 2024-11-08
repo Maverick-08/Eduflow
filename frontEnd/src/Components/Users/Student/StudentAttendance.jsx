@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
+import connectJs from '../../../connect';
 
-// A simple present/absent icon component
-const StatusIcon = ({ status }) => {
-  if (status === 'present') {
-    return <span className="text-green-500">✔️ Present</span>; // Green tick for present
-  }
-  if (status === 'absent') {
-    return <span className="text-red-500">❌ Absent</span>; // Red cross for absent
-  }
-  return <span className="text-gray-500">-</span>; // Neutral state when no status is set
-};
+// A simple attendencePercentage/absent icon component
 
-// Function to format the date as dd/mm/yyyy
-const formatDate = (dateStr) => {
-  const date = new Date(dateStr);
-  const day = String(date.getDate()).padStart(2, '0'); // Ensure two digits for day
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
 
 const StudentAttendance = () => {
+  const { backEndLink } = connectJs
+  const [classes, setClasses] = useState([]);
+  const [selectedClassID, setselectedClassID] = useState("")
+
+
+  // Function to format the date as dd/mm/yyyy
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const day = String(date.getDate()).padStart(2, '0'); // Ensure two digits for day
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+
   const [classroom, setClassroom] = useState('');
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -42,20 +42,74 @@ const StudentAttendance = () => {
     setLoading(false);
   };
 
-  // Handle classroom selection change
-  const handleClassroomChange = (e) => {
+
+
+
+  useEffect(() => {
+    const getClass = async () => {
+      let email = JSON.parse(localStorage.getItem("userInfo")).email;
+      try {
+        let response = await axios.post(
+          `${backEndLink}/fetchClassRoomS`,
+          { email },
+          { withCredentials: true }
+        );
+        setClasses(response.data);
+        console.log("Fetched classes:", response.data);
+      } catch (error) {
+        console.log("Error fetching classes:", error);
+      }
+    };
+    getClass();
+  }, []);
+
+  const [attendanceRecord, setAttendanceRecord] = useState([]);
+  const [attendencePercentage, setattendencePercentage] = useState(0);
+
+  const getAttendence = async () => {
+    console.log("seleced class id is :: ", selectedClassID);
+    let scholar_id = JSON.parse(localStorage.getItem("userInfo")).scholar_id;
+    console.log("scholar_id is :: ", scholar_id);
+    try {
+      let response = await axios.post(`${backEndLink}/fetchAttendacneByClass`, {
+        class_id: selectedClassID, scholar_id
+      }, {
+        withCredentials: true
+      })
+      console.log("response is ->>>>>>>>>>>>>>>>>>>>> ", response.data.attendance);;
+      let p = 0;
+      response.data.attendance.map((e) => {
+        e ? p += 1 : p
+      })
+      let percentage = (p/response.data.attendance.length)*100;
+      setattendencePercentage(percentage);
+      setAttendanceRecord(response.data.attendance);
+    }
+    catch (error) {
+      setAttendanceRecord([])
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getAttendence();
+  }, [selectedClassID])
+
+
+  // Modify the handleClassroomChange function to set selectedClassID directly
+  const handleClassroomChanges = (e) => {
     const selectedClassroom = e.target.value;
     setClassroom(selectedClassroom);
+
+    // Find the selected class by its subject_name
+    const selectedClass = classes.find((cls) => cls.subject_name === selectedClassroom);
+    if (selectedClass) {
+      setselectedClassID(selectedClass.class_id);
+    }
+
     fetchAttendanceData(selectedClassroom);
   };
 
-  // Sort the attendance data by date in reverse order (most recent date first)
-  const sortedAttendanceData = attendanceData.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  // Calculate the present count and total days
-  const presentCount = sortedAttendanceData.filter(row => row.status === 'present').length;
-  const totalCount = sortedAttendanceData.length;
-  const presentPercentage = (presentCount / totalCount) * 100;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
@@ -67,15 +121,18 @@ const StudentAttendance = () => {
         <select
           id="classroom"
           value={classroom}
-          onChange={handleClassroomChange}
+          onChange={handleClassroomChanges}
           className="w-48 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <option value="">Select a Classroom</option>
-          <option value="Classroom A">Classroom A</option>
-          <option value="Classroom B">Classroom B</option>
-          <option value="Classroom C">Classroom C</option>
-          {/* Add more classrooms here as needed */}
+          <option value="">Select classroom</option>
+          {classes.map((elem) => (
+            <option key={elem.class_id} value={elem.subject_name}>
+              {elem.subject_name}
+            </option>
+          ))}
         </select>
+
+
       </div>
 
       {loading ? (
@@ -90,21 +147,30 @@ const StudentAttendance = () => {
               </tr>
             </thead>
             <tbody>
-              {sortedAttendanceData.map((row, index) => (
+              {attendanceRecord.map((row, index) => (
                 <tr key={index} className="border-b hover:bg-gray-50">
                   <td className="px-4 py-2 flex items-center">
-                    <span className="mr-2 text-xl">🗓</span> {/* Calendar icon */}
+                    <i class="text-green-500 fa-regular fa-calendar-days"></i> &nbsp;&nbsp;
                     {formatDate(row.date)} {/* Format the date as dd/mm/yyyy */}
                   </td>
                   <td className="px-4 py-2">
-                    <StatusIcon status={row.status} />
+                    {
+                      row.status ?
+                        <>
+                          ✔️
+                        </>
+                        :
+                        <>
+                          ❌
+                        </>
+                    }
                   </td>
                 </tr>
               ))}
               <tr className="bg-gray-50">
-                <td className="px-4 py-2 font-semibold">Total Present Percentage</td>
+                <td className="px-4 py-2 font-semibold">Total attendencePercentage Percentage</td>
                 <td className="px-4 py-2 text-right text-lg font-semibold text-gray-700">
-                  {totalCount > 0 ? presentPercentage.toFixed(2) : '0.00'}%
+                  {attendencePercentage}%
                 </td>
               </tr>
             </tbody>

@@ -4,7 +4,7 @@ config();
 
 export const fetchAttendacneByClassShandler = async (req, res) => {
   const { class_id, scholar_id } = req.body;
-
+  console.log("opop :: ", req.body);
   if (!class_id || !scholar_id) {
     return res
       .status(400)
@@ -19,10 +19,10 @@ export const fetchAttendacneByClassShandler = async (req, res) => {
        WHERE class_id = $1 AND scholar_id = $2 
        ORDER BY attendance_date`,
       [class_id, scholar_id]
-    );
+    ); 
 
     if (result.rows.length === 0) {
-      return res
+      return res 
         .status(404)
         .json({
           msg: "No attendance records found for this student in this class.",
@@ -31,7 +31,7 @@ export const fetchAttendacneByClassShandler = async (req, res) => {
 
     // Organize attendance records by date
     const attendanceRecords = result.rows.map((record) => ({
-      date: record.attendance_date.toISOString().split("T")[0],
+      date: record.attendance_date.toISOString().split(" ")[0],
       status: record.status,
     }));
 
