@@ -5,7 +5,7 @@ export default function Streams() {
   return (
     <>
       <div className="bg-white shadow rounded-lg overflow-hidden">
-        <div className="bg-blue-600 text-white p-6 flex items-center justify-between">
+        <div className="bg-blue-600 rounded-lg text-white p-6 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">{studentClassInfo.subject_name}</h1>
             <p className="text-lg">Professor {studentClassInfo.professor_name}</p>

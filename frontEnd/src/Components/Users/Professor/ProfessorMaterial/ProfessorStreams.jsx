@@ -61,13 +61,13 @@ export default function ProfessorStreams() {
 
   return (
     <div>
-      <header className="bg-blue-600 text-white p-6 flex items-center justify-between">
+      <header className="bg-blue-600 rounded-lg text-white p-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">{currentSubject}</h1>
           <p className="text-lg">Professor {teacherName}</p>
         </div>
         <div>
-          <i style={{ fontSize: "60px" }} class="fa-brands fa-google-scholar"></i>
+        <i style={{ fontSize: "60px" }} class=" bg-white p-3 rounded-full text-blue-500 fa-brands fa-google-scholar"></i>
         </div> 
       </header>
 
