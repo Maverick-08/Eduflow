@@ -20,13 +20,11 @@ export default function StudentDashboard() {
       try {
         let response = await axios.post(
           `${backEndLink}/fetchClassRoomS`,
-          {
-            email,
-          },
+          { email },
           { withCredentials: true }
         );
-        console.log("op :: ", response.data);
         setClasses(response.data);
+        console.log("Fetched classes:", response.data);
       } catch (error) {
         console.log("Error fetching classes:", error);
       }
@@ -34,9 +32,8 @@ export default function StudentDashboard() {
     getClass();
   }, []);
 
-  const handleClass = (class_id, professor_name,subject_name) => {
-    console.log("class_id is :: ", class_id);
-    sessionStorage.setItem("studentClassInfo" ,JSON.stringify({class_id, professor_name,subject_name}))
+  const handleClass = (class_id, subject_name) => {
+    sessionStorage.setItem("currentSubject", subject_name);
     navigate(`/StudentView/studentTasks/${class_id}`);
   };
 
@@ -44,82 +41,95 @@ export default function StudentDashboard() {
     setAssignmentVisible(!isAssignmentVisible);
   };
 
-  // Handle course deletion
   const handleLeaveClass = async (class_id) => {
     let email = JSON.parse(localStorage.getItem("userInfo")).email;
     try {
       setClasses(classes.filter((course) => course.class_id !== class_id));
       await axios.post(
         `${backEndLink}/leaveClassroom`,
-        {
-          classId: class_id,
-          email,
-        },
+        { classId: class_id, email },
         { withCredentials: true }
       );
     } catch (error) {
-      console.log("Error deleting course:", error);
+      console.log("Error leaving class:", error);
+    }
+  };
+
+  const copyCourseId = async (class_id) => {
+    try {
+      await navigator.clipboard.writeText(class_id);
+      toast.success(`Course ID - (${class_id}) copied to clipboard!`, { autoClose: 1500 });
+    } catch (error) {
+      toast.error("Failed to copy Course ID.");
     }
   };
 
   return (
-    <main className="flex-1 p-6" style={{ height: "100vh" }}>
+    <main className="flex-1 p-6 bg-gray-100" style={{ minHeight: "100vh" }}>
       <ToastContainer />
-      <header className="flex items-center justify-start mb-6">
-        <h1 className="text-2xl font-semibold mr-6">Classes</h1>
-        <h1
+      <header className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-semibold text-blue-700">Classes</h1>
+        <button
           onClick={toggleAssignmentForm}
-          style={{
-            border: "2px solid black",
-            borderRadius: "100px",
-            padding: "0px 10px 4px 10px",
-            cursor: "pointer",
-          }}
-          className="text-2xl font-semibold"
+          className="bg-blue-700 text-white rounded-full px-5 py-2 shadow-lg hover:bg-blue-600 transition duration-200"
         >
-          +
-        </h1>
+          + Join Class
+        </button>
       </header>
-      {classes.length == 0 ? (
-        <>
-          <h1>
-            <center className="font-bold text-slate-700 text-xl ">
-              No classes joined
-            </center>
-          </h1>
-        </>
+
+      {classes.length === 0 ? (
+        <h1 className="font-bold text-slate-700 text-xl text-center">
+          No classes joined
+        </h1>
       ) : (
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {classes.map((course, index) => (
             <div
-              onClick={() => handleClass(course.class_id , course.professor_name, course.subject_name)}
+              style={{ boxShadow: "0px 0px 10px gray" }}
               key={index}
-              style={{ cursor: "pointer" }}
-              className="bg-white rounded-lg shadow-md overflow-hidden"
+              onClick={() => handleClass(course.class_id, course.subject_name)}
+              className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition duration-300 cursor-pointer"
             >
-              <div className={`p-4 ${course.bgColor} text-black relative`}>
-                <h2 className="text-blue-700 text-lg font-semibold">
-                  Class : {course.subject_name}
+              <div
+                className="p-6 border-b"
+                style={{ backgroundColor: "#f1f5f9" }}
+              >
+                <h2 className="text-lg font-semibold text-blue-800 mb-2">
+                  {course.subject_name}
                 </h2>
-                {course.year && <p className="text-sm">Year: {course.year}</p>}
-              </div>
-              <div className="p-4">
-                <p className="text-gray-600">
-                  Department - {course.department[0]}
+                <p className="text-sm text-gray-600">
+                  Year: {course.year || "N/A"}
                 </p>
-                <p className="text-blue-600">
+              </div>
+              <div className="p-6">
+                <p className="text-gray-700 mb-1">
+                  <strong>Department:</strong> {course.department[0]}
+                </p>
+                <p className="text-blue-500 font-semibold">
                   {course.isindividual ? "Individual" : "Combined"}
                 </p>
               </div>
-              <div className="flex justify-between p-4 border-t">
-                <FontAwesomeIcon
-                  className="text-red-500 hover:text-red-700"
+              <div className="flex justify-between p-4 border-t bg-gray-50">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    copyCourseId(course.class_id);
+                  }}
+                  className="text-blue-500 hover:text-blue-700 transition duration-200"
+                  title="Copy Course ID"
+                >
+                  <FontAwesomeIcon icon={faCopy} />
+                </button>
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
                     handleLeaveClass(course.class_id);
                   }}
-                  icon={faTrash}
-                />
+                  className="text-red-500 hover:text-red-600 transition duration-200"
+                  title="Leave Class"
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
               </div>
             </div>
           ))}
@@ -127,17 +137,19 @@ export default function StudentDashboard() {
       )}
 
       {isAssignmentVisible && (
-        <div
-          style={{ boxShadow: "0px 0px 10px gray" }}
-          className="secondSection fixed top-[15%] left-1/2 transform -translate-x-1/2 bg-white p-6 rounded-lg shadow-md"
-        >
+        <div className="fixed top-1/4 left-1/2 transform -translate-x-1/2 z-10 bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-2/3 lg:w-1/2">
           <JoinClassRoom
             setAssignmentVisible={setAssignmentVisible}
             setClasses={setClasses}
           />
         </div>
       )}
+      <div
+        className={`${isAssignmentVisible ? "block" : "hidden"
+          } fixed inset-0 bg-black opacity-30`}
+        onClick={toggleAssignmentForm}
+      ></div>
     </main>
   );
 }
-// Ksf6kCp
+  
