@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import StudentNavbar from './StudentNavbar';
 import StudentDashBoard from './StudentDashBoard';
 import StudentTask from './StudentTask';
+import StudentAttendance from './StudentAttendance';
 
 export default function StudentStore() {
     return (
@@ -15,6 +16,7 @@ export default function StudentStore() {
                 <Routes>
                     <Route path="/" element={<StudentDashBoard />} />
                     <Route path="/studentTasks*" element={<StudentTask />} />
+                    <Route path="/studentAttendance*" element={<StudentAttendance/>}/>
                 </Routes>
             </div>
         </div>
