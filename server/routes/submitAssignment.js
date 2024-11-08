@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { submitAssignmentHandler } from "../controllers/submitAssignmentController.js";
-import upload from "../middleware/multerCloudinary.js";
+import upload from "../middleware/multerAssignment.js";
 
 const router=Router();
 router.post('/',upload.array('image',3),submitAssignmentHandler)

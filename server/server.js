@@ -7,6 +7,7 @@ import Logout from "./routes/logout.js";
 import createClassroom from "./routes/createClassroom.js";
 import joinClassroom from "./routes/joinClassroom.js";
 import uploadAssignment from "./routes/uploadAssignment.js";
+import uploadMaterial from "./routes/uploadMaterial.js";
 import submitAssignment from "./routes/submitAssignment.js";
 import submissionlist from "./routes/submissionsList.js";
 import fetchClassRoomP from "./routes/fetchClassRoomP.js";
@@ -46,6 +47,7 @@ app.use("/logout", Logout);
 app.use("/createClassroom", createClassroom);
 app.use("/joinClassroom", joinClassroom);
 app.use("/uploadAssignment", uploadAssignment);
+app.use("/uploadMaterial", uploadMaterial);
 app.use("/uploadedAssignment", getUploadedAssignment)
 
 app.use("/getPeople", fetchStudents);
