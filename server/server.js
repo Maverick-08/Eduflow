@@ -17,6 +17,7 @@ import deleteClassroom from "./routes/deleteClassroom.js";
 import leaveClassroom from "./routes/leaveClassroom.js";
 import getUploadedAssignment from "./routes/getUploadedAssignment.js"
 import markAttendance from "./routes/markAttendance.js"
+import fetchAttendacneByClass from "./routes/fetchAttendacneByClass.js"
 
 
 import path from 'path';
@@ -59,6 +60,7 @@ app.use("/fetchClassRoomS", fetchClassRoomS)
 app.use("/deleteClassroom", deleteClassroom)
 app.use("/leaveClassroom", leaveClassroom)
 app.use("/markAttendance", markAttendance)
+app.use("/fetchAttendacneByClass", fetchAttendacneByClass)
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
