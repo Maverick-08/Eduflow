@@ -137,7 +137,7 @@ export default function ProfessorDashBoard() {
       </div>
 
       {isAssignmentVisible && (
-        <div className="fixed top-1/4 left-1/2 transform -translate-x-1/2 z-10 bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-2/3 lg:w-1/2">
+        <div style={{top : "15%", width:"25rem"}} className="fixed left-1/2 transform -translate-x-1/2 z-10 bg-white p-6 rounded-lg shadow-lg md:w-2/3 lg:w-1/2">
           <CreateAssignment
             setAssignmentVisible={setAssignmentVisible}
             setCourses={setCourses}

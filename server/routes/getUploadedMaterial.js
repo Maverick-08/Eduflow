@@ -3,6 +3,6 @@ import { getUploadedMaterialController } from "../controllers/getUploadedMateria
 
 const router = Router();
 
-router.get("/", getUploadedMaterialController);
+router.post("/", getUploadedMaterialController);
 
 export default router;

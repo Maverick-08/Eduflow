@@ -73,7 +73,7 @@ export default function CreateAssignment({ setAssignmentVisible, setCourses }) {
     <>
       <center>
         <h2 style={{ fontSize: "30px", cursor: "pointer" }}>
-          <b style={{ color: "rgb(147 51 234)" }}>Create ClassRoom</b>
+          <b style={{ color: "blue" }}>Create ClassRoom</b>
           <small
             onClick={() => setAssignmentVisible(false)}
             style={{ fontSize: "20px", marginLeft: "20px" }}
