@@ -2,127 +2,88 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import connectJs from '../../../connect';
 
-// A simple attendencePercentage/absent icon component
-
-
 const StudentAttendance = () => {
-  const { backEndLink } = connectJs
+  const { backEndLink } = connectJs;
   const [classes, setClasses] = useState([]);
-  const [selectedClassID, setselectedClassID] = useState("")
+  const [selectedClassID, setselectedClassID] = useState("");
+  const [classroom, setClassroom] = useState('');
+  const [attendanceData, setAttendanceData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [attendanceRecord, setAttendanceRecord] = useState([]);
+  const [attendencePercentage, setattendencePercentage] = useState(0);
 
-
-  // Function to format the date as dd/mm/yyyy
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    const day = String(date.getDate()).padStart(2, '0'); // Ensure two digits for day
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure two digits for month
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
 
-
-  const [classroom, setClassroom] = useState('');
-  const [attendanceData, setAttendanceData] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  // Mock API fetch based on classroom selection
-  const fetchAttendanceData = async (classroom) => {
-    setLoading(true);
-    // Mock API call - Replace with actual API request
-    const data = [
-      { date: '2024-11-01', status: 'present' },
-      { date: '2024-11-02', status: 'absent' },
-      { date: '2024-11-03', status: 'present' },
-      { date: '2024-11-04', status: 'absent' },
-      { date: '2024-11-05', status: 'present' },
-      { date: '2024-11-06', status: 'present' },
-      // Add more mock data
-    ];
-    setAttendanceData(data);
-    setLoading(false);
+  const getClass = async () => {
+    let email = JSON.parse(localStorage.getItem("userInfo")).email;
+    try {
+      let response = await axios.post(
+        `${backEndLink}/fetchClassRoomS`,
+        { email },
+        { withCredentials: true }
+      );
+      setClasses(response.data);
+    } catch (error) {
+      console.log("Error fetching classes:", error);
+    }
   };
 
-
-
-
-  useEffect(() => {
-    const getClass = async () => {
-      let email = JSON.parse(localStorage.getItem("userInfo")).email;
-      try {
-        let response = await axios.post(
-          `${backEndLink}/fetchClassRoomS`,
-          { email },
-          { withCredentials: true }
-        );
-        setClasses(response.data);
-        console.log("Fetched classes:", response.data);
-      } catch (error) {
-        console.log("Error fetching classes:", error);
-      }
-    };
-    getClass();
-  }, []);
-
-  const [attendanceRecord, setAttendanceRecord] = useState([]);
-  const [attendencePercentage, setattendencePercentage] = useState(0);
-
   const getAttendence = async () => {
-    console.log("seleced class id is :: ", selectedClassID);
     let scholar_id = JSON.parse(localStorage.getItem("userInfo")).scholar_id;
-    console.log("scholar_id is :: ", scholar_id);
     try {
       let response = await axios.post(`${backEndLink}/fetchAttendacneByClass`, {
         class_id: selectedClassID, scholar_id
       }, {
         withCredentials: true
-      })
-      console.log("response is ->>>>>>>>>>>>>>>>>>>>> ", response.data.attendance);;
-      let p = 0;
-      response.data.attendance.map((e) => {
-        e.status ? p += 1 : p
-      })
+      });
+      let p = response.data.attendance.reduce((acc, e) => acc + (e.status ? 1 : 0), 0);
       let percentage = ((p / response.data.attendance.length) * 100).toFixed(2);
       setattendencePercentage(percentage);
       setAttendanceRecord(response.data.attendance);
-    }
-    catch (error) {
-      setAttendanceRecord([])
+    } catch (error) {
+      setAttendanceRecord([]);
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
-    getAttendence();
-  }, [selectedClassID])
+    getClass();
+  }, []);
 
+  useEffect(() => {
+    if (selectedClassID) {
+      getAttendence();
+    }
+  }, [selectedClassID]);
 
-  // Modify the handleClassroomChange function to set selectedClassID directly
   const handleClassroomChanges = (e) => {
     const selectedClassroom = e.target.value;
     setClassroom(selectedClassroom);
-
-    // Find the selected class by its subject_name
     const selectedClass = classes.find((cls) => cls.subject_name === selectedClassroom);
     if (selectedClass) {
       setselectedClassID(selectedClass.class_id);
     }
-
-    fetchAttendanceData(selectedClassroom);
   };
 
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-semibold text-gray-700 mb-6">Student Attendance</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6">
+      <h1 className="text-4xl font-bold text-blue-600 mb-8">Student Attendance</h1>
 
-      {/* Classroom selection input */}
-      <div className="mb-6">
-        <label htmlFor="classroom" className="block text-gray-700 font-semibold mb-2">Select Classroom</label>
+      <div className="mb-8 w-full max-w-xs">
+        <label htmlFor="classroom" className="block text-lg font-medium text-gray-700 mb-2 text-center">
+          Select Classroom
+        </label>
         <select
           id="classroom"
           value={classroom}
           onChange={handleClassroomChanges}
-          className="w-48 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Select classroom</option>
           {classes.map((elem) => (
@@ -131,45 +92,38 @@ const StudentAttendance = () => {
             </option>
           ))}
         </select>
-
-
       </div>
 
       {loading ? (
-        <div className="text-lg font-semibold text-gray-600">Loading...</div>
+        <div className="text-xl font-semibold text-gray-600">Loading...</div>
       ) : (
-        <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
-          <table className="w-full table-auto border-collapse">
+        <div className="w-full max-w-4xl bg-white shadow-md rounded-lg overflow-hidden">
+          <table className="w-full">
             <thead>
-              <tr className="bg-blue-500 text-white">
-                <th className="px-4 py-2 text-left">Date</th>
-                <th className="px-4 py-2 text-left">Status</th>
+              <tr className="bg-blue-500 text-white text-left text-sm uppercase tracking-wider">
+                <th className="px-6 py-4">Date</th>
+                <th className="px-6 py-4">Status</th>
               </tr>
             </thead>
             <tbody>
               {attendanceRecord.map((row, index) => (
-                <tr key={index} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-2 flex items-center">
-                    <i class="text-green-500 fa-regular fa-calendar-days"></i> &nbsp;&nbsp;
-                    {formatDate(row.date)} {/* Format the date as dd/mm/yyyy */}
+                <tr key={index} className="border-b hover:bg-gray-100">
+                  <td className="px-6 py-4 text-gray-700 text-sm flex items-center">
+                    <i className="text-blue-500 fa-regular fa-calendar-days mr-2"></i>
+                    {formatDate(row.date)}
                   </td>
-                  <td className="px-4 py-2">
-                    {
-                      row.status ?
-                        <>
-                          ✔️
-                        </>
-                        :
-                        <>
-                          ❌
-                        </>
-                    }
+                  <td className="px-6 py-4 text-gray-700 text-sm">
+                    {row.status ? (
+                      <span className="text-green-600 font-semibold">✔️ Present</span>
+                    ) : (
+                      <span className="text-red-600 font-semibold">❌ Absent</span>
+                    )}
                   </td>
                 </tr>
               ))}
-              <tr className="bg-gray-50">
-                <td className="px-4 py-2 font-semibold">Total attendencePercentage Percentage</td>
-                <td className="px-4 py-2 text-right text-lg font-semibold text-gray-700">
+              <tr className="bg-gray-100">
+                <td className="px-6 py-4 font-semibold text-gray-700">Attendance Percentage</td>
+                <td className="px-6 py-4 text-lg font-semibold text-blue-600 text-right">
                   {attendencePercentage}%
                 </td>
               </tr>
