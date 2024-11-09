@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import connectJs from "../../../../connect";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify"
 
 export default function AttendancePage() {
   const [students, setStudents] = useState([]);
@@ -55,7 +56,7 @@ export default function AttendancePage() {
         attendance_date,
         attendanceStatus,
       });
-      alert(`Attendance submitted successfully for ${attendance_date}`);
+      toast.success(`Attendance submitted successfully for ${attendance_date}`, { autoClose: 1500 })
     } catch (error) {
       console.error("Error submitting attendance:", error);
     }
@@ -79,6 +80,7 @@ export default function AttendancePage() {
 
   return (
     <main className="flex-1 p-6 bg-gray-50 min-h-screen">
+      <ToastContainer />
       <header className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-blue-600">Attendance Management</h1>
       </header>
@@ -95,21 +97,19 @@ export default function AttendancePage() {
               <div className="flex space-x-4">
                 <button
                   onClick={() => handleAttendanceChange(student, "present")}
-                  className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${
-                    attendance[student.scholar_id] === "present"
+                  className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${attendance[student.scholar_id] === "present"
                       ? "bg-green-500 text-white"
                       : "border-2 border-gray-300 text-gray-500"
-                  }`}
+                    }`}
                 >
                   ✓
                 </button>
                 <button
                   onClick={() => handleAttendanceChange(student, "absent")}
-                  className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${
-                    attendance[student.scholar_id] === "absent"
+                  className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${attendance[student.scholar_id] === "absent"
                       ? "bg-red-500 text-white"
                       : "border-2 border-gray-300 text-gray-500"
-                  }`}
+                    }`}
                 >
                   ✗
                 </button>

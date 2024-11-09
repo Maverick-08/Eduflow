@@ -31,28 +31,28 @@ export default function StudentTask() {
         >
           Stream
         </div>
-        <div
+        {/* <div
           onClick={() => handleTabClick("attendence")}
           className={`text-blue-700 cursor-pointer ${
             activeTab === "attendence" ? "border-b-2 border-blue-600 pb-1" : ""
           }`}
         >
           Attendance
-        </div>
+        </div> */}
         <div
           onClick={() => handleTabClick("allStudents")}
           className={`text-blue-700 cursor-pointer ${
             activeTab === "allStudents" ? "border-b-2 border-blue-600 pb-1" : ""
           }`}
         >
-          ClassMates
+          Classmates
         </div>
       </nav>
 
       <Routes>
         {/* Define the updated routes to match paths */}
         <Route path="/:id" element={<Streams />} />
-        <Route path="/attendence/:id" element={<Attendence />} />
+        {/* <Route path="/attendence/:id" element={<Attendence />} /> */}
         <Route path="/allStudents/:id" element={<AllStudents />} />
       </Routes>
     </div>
