@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import connectJs from "../../../../connect";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify"
+import { toast, ToastContainer } from "react-toastify";
 
 export default function AttendancePage() {
   const [students, setStudents] = useState([]);
   const [attendance, setAttendance] = useState({});
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
 
   useEffect(() => {
     const getStudents = async () => {
@@ -43,7 +44,7 @@ export default function AttendancePage() {
     const path = window.location.pathname;
     const classString = path.split("/");
     const classID = classString[classString.length - 1];
-    const attendance_date = new Date().toLocaleDateString("en-CA");
+    const attendance_date = selectedDate;
 
     const attendanceStatus = Object.entries(attendance).map(([scholar_id, status]) => ({
       scholar_id,
@@ -56,15 +57,14 @@ export default function AttendancePage() {
         attendance_date,
         attendanceStatus,
       });
-      toast.success(`Attendance submitted successfully for ${attendance_date}`, { autoClose: 1500 })
+      toast.success(`Attendance submitted successfully for ${attendance_date}`, { autoClose: 1500 });
     } catch (error) {
       console.error("Error submitting attendance:", error);
     }
   };
 
-
   const exportToExcel = () => {
-    const today = new Date().toLocaleDateString();
+    const today = selectedDate;
     const attendanceData = Object.entries(attendance).map(
       ([student, status]) => ({
         Student: student,
@@ -83,14 +83,25 @@ export default function AttendancePage() {
       <ToastContainer />
       <header className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-blue-600">Attendance Management</h1>
+        <div className="mt-4">
+          <label className="mr-2 text-lg font-semibold text-gray-600">Select Date:</label>
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="border border-gray-300 rounded-lg px-2 py-1"
+          />
+        </div>
       </header>
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 gap-4">
           {students.map((student) => (
+            
             <div
               key={student.scholar_id}
               className="flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow-sm transition-transform hover:scale-105"
             >
+              <i class="rounded-full mr-4 border p-3 text-green-500 border-gray-300 fa-brands fa-google-scholar"></i>
               <span className="text-lg font-semibold text-gray-800">
                 {student.name} <span className="text-gray-500">({student.scholar_id})</span>
               </span>
