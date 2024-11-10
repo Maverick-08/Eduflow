@@ -19,6 +19,8 @@ import getUploadedAssignment from "./routes/getUploadedAssignment.js"
 import getUploadedMaterial from "./routes/getUploadedMaterial.js"
 import markAttendance from "./routes/markAttendance.js"
 import fetchAttendacneByClass from "./routes/fetchAttendacneByClass.js"
+import fetchAttendanceByDate from "./routes/fetchAttendanceByDate.js"
+
 
 
 import path from 'path';
@@ -65,6 +67,7 @@ app.use("/deleteClassroom", deleteClassroom)
 app.use("/leaveClassroom", leaveClassroom)
 app.use("/markAttendance", markAttendance)
 app.use("/fetchAttendacneByClass", fetchAttendacneByClass)
+app.use("/fetchAttendanceByDate", fetchAttendanceByDate)
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
