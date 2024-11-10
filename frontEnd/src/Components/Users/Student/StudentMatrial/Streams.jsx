@@ -103,7 +103,7 @@ export default function Streams() {
                   <i className="fas fa-file-alt text-blue-700"></i>
                   <div className="flex-grow">
                     <p className="font-medium">
-                      {studentClassInfo.professor_name} posted a new assignment:{" "}
+                      New Assignment:{" "}
                       {assignment.title}
                     </p>
                     <p className="text-blue-700 text-sm">
@@ -135,27 +135,27 @@ export default function Streams() {
 
 
 
-            {material.map((assignment, index) => (
+            {material.map((material, index) => (
               <div key={index} style={{width:"50rem"}} className="bg-white shadow rounded-lg p-4 mb-4">
                 <div className="flex items-center space-x-2">
                   <i className="fas fa-file-alt text-blue-700"></i>
                   <div className="flex-grow">
                     <p className="font-medium">
-                      {studentClassInfo.professor_name} posted a new material:{" "}
-                      {assignment.title}
+                      New Material:{" "}
+                      {material.title}
                     </p>
+                    {/* <p className="text-blue-700 text-sm">
+                      Deadline: {formatDateToReadable(material.deadline)}
+                    </p> */}
                     <p className="text-blue-700 text-sm">
-                      Deadline: {formatDateToReadable(assignment.deadline)}
-                    </p>
-                    <p className="text-blue-700 text-sm">
-                      Instructions: {assignment.instruction}
+                      Instructions: {material.instruction}
                     </p>
                   </div>
 
                   {/* If documentUrl exists, show a link to view the document */}
-                  {assignment.documentUrl && (
+                  {material.documentUrl && (
                     <a
-                      href={assignment.documentUrl} // Make sure this URL points to the PDF file
+                      href={material.documentUrl} // Make sure this URL points to the PDF file
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-700 ml-auto"
