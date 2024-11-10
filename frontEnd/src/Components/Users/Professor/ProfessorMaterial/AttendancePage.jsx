@@ -19,9 +19,7 @@ export default function AttendancePage() {
         const response = await axios.post(
           `${backEndLink}/getPeople`,
           { class_id: classID },
-          {
-            withCredentials: true,
-          }
+          { withCredentials: true }
         );
         setStudents(response.data.students);
         const initialAttendance = response.data.students.reduce(
@@ -78,6 +76,38 @@ export default function AttendancePage() {
     XLSX.writeFile(wb, `Attendance_${today}.xlsx`);
   };
 
+  const getAttendance = async (e) => {
+    const path = window.location.pathname;
+    const classString = path.split("/");
+    const class_id = classString[classString.length - 1];
+    const attendance_date = e.target.value;
+    setSelectedDate(attendance_date);
+    const { backEndLink } = connectJs;
+    try {
+      const response = await axios.post(
+        `${backEndLink}/fetchAttendanceByDate`,
+        { class_id, attendance_date },
+        { withCredentials: true }
+      );
+      console.log(response);
+      const updatedStudents = response.data.attendance;
+      // const updatedStudents = response.data.attendance.sort((a, b) =>
+      //   a.name.localeCompare(b.name)
+      // );
+      setStudents(updatedStudents);
+
+      const updatedAttendance = updatedStudents.reduce((acc, student) => ({
+        ...acc,
+        [student.scholar_id]: student.status ? "present" : "absent",
+      }), {});
+      
+      console.log(updatedAttendance);
+      setAttendance(updatedAttendance);
+    } catch (error) {
+      setStudents([]);
+    }
+  };
+
   return (
     <main className="flex-1 p-6 bg-gray-50 min-h-screen">
       <ToastContainer />
@@ -88,45 +118,51 @@ export default function AttendancePage() {
           <input
             type="date"
             value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="border border-gray-300 rounded-lg px-2 py-1"
+            onChange={getAttendance}
+            className="border text-1xl font-bold text-green-500 border-gray-300 rounded-lg px-2 py-1"
           />
         </div>
       </header>
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 gap-4">
-          {students.map((student) => (
-            
-            <div
-              key={student.scholar_id}
-              className="flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow-sm transition-transform hover:scale-105"
-            >
-              <i class="rounded-full mr-4 border p-3 text-green-500 border-gray-300 fa-brands fa-google-scholar"></i>
-              <span className="text-lg font-semibold text-gray-800">
-                {student.name} <span className="text-gray-500">({student.scholar_id})</span>
-              </span>
-              <div className="flex space-x-4">
-                <button
-                  onClick={() => handleAttendanceChange(student, "present")}
-                  className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${attendance[student.scholar_id] === "present"
-                      ? "bg-green-500 text-white"
-                      : "border-2 border-gray-300 text-gray-500"
-                    }`}
-                >
-                  ✓
-                </button>
-                <button
-                  onClick={() => handleAttendanceChange(student, "absent")}
-                  className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${attendance[student.scholar_id] === "absent"
-                      ? "bg-red-500 text-white"
-                      : "border-2 border-gray-300 text-gray-500"
-                    }`}
-                >
-                  ✗
-                </button>
-              </div>
-            </div>
-          ))}
+          {
+            students.length === 0 ?
+              <center>No attendance for this day</center>
+              :
+              <>
+                {students.map((student) => (
+                  <div
+                    key={student.scholar_id}
+                    className="flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow-sm transition-transform hover:scale-105"
+                  >
+                    <i class="rounded-full mr-4 border p-3 text-green-500 border-gray-300 fa-brands fa-google-scholar"></i>
+                    <span className="text-lg font-semibold text-gray-800">
+                      {student.name} <span className="text-gray-500">({student.scholar_id})</span>
+                    </span>
+                    <div className="flex space-x-4">
+                      <button
+                        onClick={() => handleAttendanceChange(student, "present")}
+                        className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${attendance[student.scholar_id] === "present"
+                          ? "bg-green-500 text-white"
+                          : "border-2 border-gray-300 text-gray-500"
+                          }`}
+                      >
+                        ✓
+                      </button>
+                      <button
+                        onClick={() => handleAttendanceChange(student, "absent")}
+                        className={`w-10 h-10 flex items-center justify-center rounded-lg transition-colors ${attendance[student.scholar_id] === "absent"
+                          ? "bg-red-500 text-white"
+                          : "border-2 border-gray-300 text-gray-500"
+                          }`}
+                      >
+                        ✗
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </>
+          }
         </div>
         <div className="mt-8 flex justify-center gap-4">
           <button
