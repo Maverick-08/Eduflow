@@ -7,9 +7,11 @@ export const fetchAttendacneByDatehandler = async (req, res) => {
 
   try {
     const query = `
-      SELECT * FROM attendance
-      WHERE class_id = $1 AND attendance_date = $2;
-    `;
+    SELECT a.*, CONCAT(stu.fname, ' ', stu.lname) AS name 
+    FROM attendance AS a
+    JOIN student AS stu ON a.scholar_id = stu.scholar_id
+    WHERE a.class_id = $1 AND a.attendance_date = $2;
+  `;
 
     const result = await Client.query(query, [class_id, attendance_date]);
 
