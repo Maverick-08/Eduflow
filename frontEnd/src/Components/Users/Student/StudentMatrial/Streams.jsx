@@ -98,7 +98,7 @@ export default function Streams() {
 
             {/* Map through the streams data to display assignment posts */}
             {streams.map((assignment, index) => (
-              <div key={index} style={{width:"50rem"}} className="bg-white shadow rounded-lg p-4 mb-4">
+              <div key={index} style={{width:"50rem"}} className="bg-white shadow rounded-lg p-4 mb-4 cursor-pointer border-2 hover:border-blue-300">
                 <div className="flex items-center space-x-2">
                   <i className="fas fa-file-alt text-blue-700"></i>
                   <div className="flex-grow">
