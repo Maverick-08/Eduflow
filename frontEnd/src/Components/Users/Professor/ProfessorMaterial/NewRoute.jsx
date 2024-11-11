@@ -14,6 +14,7 @@ const NewRoute = () => {
   const [studentsData, setStudentsData] = useState([]);
   const [grade, setGrade] = useState(null);
   const [scholarId, setScholarId] = useState(null);
+  const [assignmentDetails, setAssignmentDetails] = useState(null);
 
   useEffect(() => {
     const getStudentsData = async () => {
@@ -29,11 +30,36 @@ const NewRoute = () => {
       }
     };
 
+    const getDetails = async () => {
+      try{
+        const response = await axios.post(
+          `http://localhost:3000/assignmentDetails`,
+          { assignmentId },
+          {
+            withCredentials: true,
+          }
+        );
+
+        setAssignmentDetails(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getDetails();
     getStudentsData();
   }, []);
 
   // Function to determine the assignment status symbol
   const getAssignmentStatusSymbol = (submitted, isLate) => {
+    if (assignmentDetails.grade == "Ungraded" && submitted) {
+      return "✔";
+    }
+
+    if (assignmentDetails == "Ungraded" && !submitted) {
+      return "❌";
+    }
+
     if (!submitted) {
       return "❌"; // Not Submitted (red cross)
     }
@@ -45,26 +71,30 @@ const NewRoute = () => {
     return "✔"; // Submitted (checkmark)
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const submitGrade = async () => {
       try {
         const payload = { assignmentId, scholarId, grade };
-  
+
         if (isNaN(grade) || grade < 0) {
           toast.error("Negative grade is not allowed");
           return;
         }
-  
-        await axios.post("http://localhost:3000/viewSubmissions/grade", payload, {
-          withCredentials: true,
-        });
+
+        await axios.post(
+          "http://localhost:3000/viewSubmissions/grade",
+          payload,
+          {
+            withCredentials: true,
+          }
+        );
       } catch (err) {
         console.log(err);
       }
     };
 
     submitGrade();
-  },[grade])
+  }, [grade]);
 
   return (
     <div className="container mx-auto p-6">
@@ -125,20 +155,33 @@ const NewRoute = () => {
                 <td className="py-2 px-4 border-b text-center text-gray-800">
                   {getAssignmentStatusSymbol(student.submitted, student.isLate)}
                 </td>
-                <td className="flex justify-center items-center">
-                  <input
-                    type="number"
-                    className="text-center py-2"
-                    onChange={(e) => {
-                      setScholarId(student.scholarId)
-                      setGrade(e.target.value); 
-                    }}
-                  />
+                <td className="flex justify-center border-b items-center py-2">
+                  {student.assignedGrade ? (
+                    <p className="text-xl text-gray-400">
+                      {student.assignedGrade}
+                    </p>
+                  ) : (
+                    <input
+                      type="number"
+                      className={`text-center py-1 border-2 border-gray-400 ${
+                        student.submitted ? "" : "cursor-not-allowed"
+                      }`}
+                      onChange={(e) => {
+                        if (student.submitted) {
+                          setScholarId(student.scholarId);
+                          setGrade(e.target.value);
+                        }
+                      }}
+                    />
+                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <div className="flex justify-center items-center mt-4">
+          <button onClick={()=> window.location.reload()} className="bg-green-400 rounded-lg px-16 py-4 text-white text-2xl">Submit</button>
+        </div>
       </div>
     </div>
   );

@@ -50,4 +50,3 @@ export const uploadAssignmentHandler = async (req, res) => {
     return res.status(500).json({ msg: "An error occurred during upload" });
   }
 };
-

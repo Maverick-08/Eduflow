@@ -25,7 +25,7 @@ export const showListofSubmissionsHandler = async (req, res) => {
 
     const submissionList = response.rows;
 
-    // console.log("Submission List : ",submissionList)
+    // console.log("Submission List : ",submissionList);
 
     let submissionMap = {};
 
@@ -39,11 +39,13 @@ export const showListofSubmissionsHandler = async (req, res) => {
       let studentData = { 
         "name": studentsList[i].fname + " "+studentsList[i].lname,
         "scholarId": studentsList[i].scholar_id,
+        "assignedGrade": null
       }
 
       if(studentsList[i].scholar_id in submissionMap){
         studentData["submitted"] = true;
         studentData["isLate"] = submissionList[submissionMap[studentsList[i].scholar_id]].islate;
+        studentData["assignedGrade"] = submissionList[submissionMap[studentsList[i].scholar_id]].grade;
       }
       else{
         studentData["submitted"] = false;
