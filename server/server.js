@@ -21,6 +21,7 @@ import markAttendance from "./routes/markAttendance.js"
 import fetchAttendacneByClass from "./routes/fetchAttendacneByClass.js"
 import fetchAttendanceByDate from "./routes/fetchAttendanceByDate.js"
 import getSubmissionFile from "./controllers/getSubmissionFile.js"
+import getAssignmentDetails from "./routes/assignmentDetails.js"
 
 
 
@@ -69,6 +70,7 @@ app.use("/leaveClassroom", leaveClassroom)
 app.use("/markAttendance", markAttendance)
 app.use("/fetchAttendacneByClass", fetchAttendacneByClass)
 app.use("/fetchAttendanceByDate", fetchAttendanceByDate)
+app.use("/assignmentDetails",getAssignmentDetails)
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

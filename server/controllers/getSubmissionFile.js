@@ -9,6 +9,7 @@ const submittedFile = (req, res) => {
             return res.json({msg:"Missing scholar id"})
         }
         const dirname = import.meta.url.slice(8,48)
+        console.log("DIRNAME : "+ dirname);
 
 
         // console.log(path.join(dirname, 'uploads', 'submissions', scholarId));
