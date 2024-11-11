@@ -16,14 +16,16 @@ export const showListofSubmissionsHandler = async (req, res) => {
       [classId]
     )
     
-    const studentsList = response.rows; 
+    const studentsList = response.rows;
 
     response = await Client.query(
-      "SELECT * FROM submission WHERE class_id = $1 OR assignment_id = $2",
+      "SELECT * FROM submission WHERE class_id = $1 AND assignment_id = $2",
       [classId, assignmentId]
     );
 
     const submissionList = response.rows;
+
+    // console.log("Submission List : ",submissionList)
 
     let submissionMap = {};
 

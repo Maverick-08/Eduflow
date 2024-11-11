@@ -69,7 +69,7 @@ export default function Streams() {
   function submitOverlayVisibility(element, assignment) {
     // console.log("Submit Overlay Visibility");
     // console.log(element);
-    setSubmitOverlayHeight(element.pageY - 50);
+    setSubmitOverlayHeight(element.pageY);
     setSelectedAssignment(assignment);
     // console.log("---selected----")
     // console.log(selectedAssignment);
@@ -185,7 +185,7 @@ export default function Streams() {
               <div
                 style={{
                   position: "fixed",
-                  top: `${submitOverlayHeight}px`,
+                  top: `450px`,
                   left: "50%",
                   transform: "translateX(-50%)",
                   zIndex: 10,

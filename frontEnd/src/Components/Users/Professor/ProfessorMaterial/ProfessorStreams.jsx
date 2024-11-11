@@ -85,7 +85,7 @@ export default function ProfessorStreams() {
                 <i className="fas fa-file-alt text-blue-600"></i>
                 <p onClick={() => {
                   navigate(`/new-route/${classID}/${assignment.assignment_id}`, { state: { someData: assignment.stateData } });
-                }} className="ml-2 font-bold">Professor {teacherName} posted assignment : {assignment.title}</p>
+                }} className="ml-2 font-bold">New Assignment : {assignment.title}</p>
               </div>
               <p className="text-gray-500">Deadline <b>{formatDateToReadable(assignment.deadline)}</b></p>
               <p className="text-gray-500">Instructions <b>{assignment.instruction}</b></p>
