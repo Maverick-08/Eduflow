@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import connectJs from '../../../../connect';
-
+import { toast, ToastContainer} from 'react-toastify'
 export default function ProfessorStreams() {
   const navigate = useNavigate();
 
@@ -76,8 +76,23 @@ export default function ProfessorStreams() {
     // Add edit functionality here
   };
 
-  const handleDelete = (assignmentId) => {
-    console.log(`Delete assignment with ID: ${assignmentId}`);
+  const handleDelete = async (assignmentId) => {
+    try {
+      // Call the delete API
+      await axios.delete(`http://localhost:3000/deleteAssignment/${assignmentId}`, {
+        withCredentials: true
+      });
+
+      // Alert success
+      toast('Assignment deleted successfully!', {autoClose:1500});
+
+      // Update the stream state to remove the deleted assignment
+      setStream(streams.filter(assignment => assignment.assignment_id !== assignmentId));
+    } catch (error) {
+      console.error('Error deleting assignment:', error);
+      toast('Failed to delete assignment');
+    }
+    // console.log(`Delete assignment with ID: ${assignmentId}`);
     // Add delete functionality here
   };
 
@@ -95,6 +110,7 @@ export default function ProfessorStreams() {
       </header>
 
       <div className="flex p-6">
+        <ToastContainer/>
         <main className="w-full">
           {streams.map((assignment, index) => (
             <div
