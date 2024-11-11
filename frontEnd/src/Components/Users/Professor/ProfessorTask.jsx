@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import ProfessMaterial from "./ProfessorMaterial/ProfessMaterial";
 import ProfessorAssignment from "./ProfessorMaterial/ProfessorAssignment";
 import ProfessorStudents from "./ProfessorMaterial/ProfessorStudents";
@@ -8,7 +8,6 @@ import AttendancePage from "./ProfessorMaterial/AttendancePage";
 
 export default function ProfessorTask() {
   const navigate = useNavigate();
-
   const [activeTab, setActiveTab] = useState("stream");
 
   const handleTabClick = (tab) => {
@@ -23,55 +22,47 @@ export default function ProfessorTask() {
   };
 
   return (
-    <div style={{ width: "100%" }} className="max-w-4xl mx-auto p-4">
-      <nav className="flex space-x-4 border-b pb-2 mb-4">
+    <div className="max-w-4xl mx-auto p-4 w-full">
+      <nav className="flex justify-center space-x-6 border-b pb-3 mb-6 text-lg font-semibold">
         <div
           onClick={() => handleTabClick("")}
-          className={`text-blue-700 cursor-pointer ${
-            activeTab === "" ? "border-b-2 border-blue-600 pb-1" : ""
-          }`}
+          className={`cursor-pointer ${
+            activeTab === "" ? "border-b-2 border-blue-600 text-blue-700" : "text-gray-500"
+          } hover:text-blue-700 transition duration-200`}
         >
           Streams
         </div>
         <div
           onClick={() => handleTabClick("professorMaterial")}
-          className={`text-blue-700 cursor-pointer ${
-            activeTab === "professorMaterial"
-              ? "border-b-2 border-blue-600 pb-1"
-              : ""
-          }`}
+          className={`cursor-pointer ${
+            activeTab === "professorMaterial" ? "border-b-2 border-blue-600 text-blue-700" : "text-gray-500"
+          } hover:text-blue-700 transition duration-200`}
         >
           Material
         </div>
         <div
           onClick={() => handleTabClick("assignment")}
-          className={`text-blue-700 cursor-pointer ${
-            activeTab === "assignment"
-              ? "border-b-2 border-blue-600 pb-1"
-              : ""
-          }`}
+          className={`cursor-pointer ${
+            activeTab === "assignment" ? "border-b-2 border-blue-600 text-blue-700" : "text-gray-500"
+          } hover:text-blue-700 transition duration-200`}
         >
           Assignment
         </div>
         <div
           onClick={() => handleTabClick("studentsInClass")}
-          className={`text-blue-700 cursor-pointer ${
-            activeTab === "studentsInClass"
-              ? "border-b-2 border-blue-600 pb-1"
-              : ""
-          }`}
+          className={`cursor-pointer ${
+            activeTab === "studentsInClass" ? "border-b-2 border-blue-600 text-blue-700" : "text-gray-500"
+          } hover:text-blue-700 transition duration-200`}
         >
           Students
         </div>
         <div
           onClick={() => handleTabClick("attendancePage")}
-          className={`text-blue-700 cursor-pointer ${
-            activeTab === "attendancePage"
-              ? "border-b-2 border-blue-600 pb-1"
-              : ""
-          }`}
+          className={`cursor-pointer ${
+            activeTab === "attendancePage" ? "border-b-2 border-blue-600 text-blue-700" : "text-gray-500"
+          } hover:text-blue-700 transition duration-200`}
         >
-          Attendence
+          Attendance
         </div>
       </nav>
 

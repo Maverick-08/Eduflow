@@ -10,15 +10,13 @@ export default function Streams() {
   const [streams, setStream] = useState([]);
   const [material, setMaterial] = useState([]);
   const [isSubmitOverlayVisible, SetSubmitOverlayVisible] = useState(false);
-  const [submitOverlayHeight, setSubmitOverlayHeight] = useState(0);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
 
   useEffect(() => {
     const getStreams = async () => {
       const { backEndLink } = connectJs;
       const path = window.location.pathname;
-      const classString = path.split("/");
-      const classID = classString[classString.length - 1];
+      const classID = path.split("/").pop();
       try {
         let response = await axios.get(
           `${backEndLink}/uploadedAssignment/${classID}`,
@@ -26,9 +24,7 @@ export default function Streams() {
             withCredentials: true,
           }
         );
-        console.log("-----Assignment------");
-        console.log(response);
-        setStream(response.data.data); // Store the data fetched from the backend
+        setStream(response.data.data); 
       } catch (error) {
         console.log(error);
       }
@@ -37,11 +33,10 @@ export default function Streams() {
   }, []);
 
   useEffect(() => {
-    const getStreams = async () => {
+    const getMaterials = async () => {
       const { backEndLink } = connectJs;
       const path = window.location.pathname;
-      const classString = path.split("/");
-      const classID = classString[classString.length - 1];
+      const classID = path.split("/").pop();
       try {
         let response = await axios.post(
           `${backEndLink}/getUploadedMaterial`,
@@ -52,89 +47,55 @@ export default function Streams() {
             withCredentials: true,
           }
         );
-        console.log(response);
-        setMaterial(response.data.data); // Store the data fetched from the backend
-        console.log(response.data.data);
+        setMaterial(response.data.data);
       } catch (error) {
         console.log(error);
       }
     };
-    getStreams();
+    getMaterials();
   }, []);
 
-  function submitAssignment() {
-    SetSubmitOverlayVisible(false);
-  }
-
-  function submitOverlayVisibility(element, assignment) {
-    // console.log("Submit Overlay Visibility");
-    // console.log(element);
-    setSubmitOverlayHeight(element.pageY);
+  function submitOverlayVisibility(assignment) {
     setSelectedAssignment(assignment);
-    // console.log("---selected----")
-    // console.log(selectedAssignment);
     SetSubmitOverlayVisible(true);
   }
 
   function formatDateToReadable(dateStr) {
     const date = new Date(dateStr);
-    const options = {
+    return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
-    };
-    return date.toLocaleDateString("en-US", options);
+    });
   }
 
   return (
     <>
-      <div className="bg-white p-4 shadow rounded-lg overflow-hidden">
+      <div className="bg-white p-6 shadow-lg rounded-lg">
         <ToastContainer />
         <div className="bg-blue-600 rounded-lg text-white p-6 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">
-              {studentClassInfo.subject_name}
-            </h1>
-            <p className="text-lg">
-              Professor {studentClassInfo.professor_name}
-            </p>
+            <h1 className="text-2xl font-bold">{studentClassInfo.subject_name}</h1>
+            <p className="text-lg">Professor {studentClassInfo.professor_name}</p>
           </div>
-          <div>
-            <i
-              style={{ fontSize: "60px" }}
-              className=" bg-white p-3 rounded-full text-blue-500 fa-brands fa-google-scholar"
-            ></i>
-          </div>
+          <i className="text-6xl bg-white p-3 rounded-full text-blue-500 fa-brands fa-google-scholar"></i>
         </div>
-        <div className="p-4 flex space-x-4">
-          <div className="w-3/4">
-            {/* Map through the streams data to display assignment posts */}
+        <div className="p-4">
+          <div className="space-y-4">
             {streams.map((assignment, index) => (
               <div
                 key={index}
-                onClick={(element) =>
-                  submitOverlayVisibility(element, assignment)
-                }
-                style={{ width: "50rem" }}
-                className="bg-white shadow rounded-lg p-4 mb-4 cursor-pointer border-2 hover:border-blue-300"
+                onClick={() => submitOverlayVisibility(assignment)}
+                className="bg-white shadow-md rounded-lg p-4 cursor-pointer hover:border-blue-300 border-2"
               >
-                <div className="flex items-center space-x-2">
-                  <i className="fas fa-file-alt text-blue-700"></i>
+                <div className="flex items-start space-x-3">
+                  <i className="fas fa-file-alt text-blue-700 mt-1"></i>
                   <div className="flex-grow">
-                    <p className="font-medium">
-                      New Assignment: {assignment.title}
-                    </p>
-                    <p className="text-blue-700 text-sm">
-                      Deadline: {formatDateToReadable(assignment.deadline)}
-                    </p>
-                    <p className="text-blue-700 text-sm">
-                      Grade: {assignment.grade}
-                    </p>
-                    <p className="text-blue-700 text-sm">
-                      Instructions: {assignment.instruction}
-                    </p>
+                    <p className="font-medium">New Assignment: {assignment.title}</p>
+                    <p className="text-sm text-blue-700">Deadline: {formatDateToReadable(assignment.deadline)}</p>
+                    <p className="text-sm text-blue-700">Grade: {assignment.grade}</p>
+                    <p className="text-sm text-blue-700">Instructions: {assignment.instruction}</p>
                   </div>
-
                   {assignment.documentUrl && (
                     <a
                       href={assignment.documentUrl}
@@ -145,28 +106,18 @@ export default function Streams() {
                       View Document
                     </a>
                   )}
-                  <i className="fas fa-ellipsis-v text-blue-700 ml-auto"></i>
                 </div>
               </div>
             ))}
 
             {material.map((material, index) => (
-              <div
-                key={index}
-                style={{ width: "50rem" }}
-                className="bg-white shadow rounded-lg p-4 mb-4"
-              >
-                <div className="flex items-center space-x-2">
-                  <i className="fas fa-file-alt text-blue-700"></i>
+              <div key={index} className="bg-white shadow-md rounded-lg p-4">
+                <div className="flex items-start space-x-3">
+                  <i className="fas fa-file-alt text-blue-700 mt-1"></i>
                   <div className="flex-grow">
-                    <p className="font-medium">
-                      New Material: {material.title}
-                    </p>
-                    <p className="text-blue-700 text-sm">
-                      Instructions: {material.instruction}
-                    </p>
+                    <p className="font-medium">New Material: {material.title}</p>
+                    <p className="text-sm text-blue-700">Instructions: {material.instruction}</p>
                   </div>
-
                   {material.documentUrl && (
                     <a
                       href={material.documentUrl}
@@ -177,39 +128,19 @@ export default function Streams() {
                       View Document
                     </a>
                   )}
-                  <i className="fas fa-ellipsis-v text-blue-700 ml-auto"></i>
                 </div>
               </div>
             ))}
+
             {isSubmitOverlayVisible && (
-              <div
-                style={{
-                  position: "fixed",
-                  top: "20%",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  zIndex: 10,
-                  backgroundColor: "white",
-                  padding: "1.5rem",
-                  borderRadius: "0.5rem",
-                  boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
-                  width: "90%",
-                  maxWidth: "600px",
-                }}
-              >
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <SubmitAssignmentComponent
                   selectedAssignment={selectedAssignment}
                   SetSubmitOverlayVisible={SetSubmitOverlayVisible}
-                  classId = {studentClassInfo.class_id}
+                  classId={studentClassInfo.class_id}
                 />
               </div>
             )}
-            <div
-              className={`${
-                isSubmitOverlayVisible ? "block" : "hidden"
-              } fixed inset-0 bg-black opacity-30`}
-              onClick={() => SetSubmitOverlayVisible(false)}
-            ></div>
           </div>
         </div>
       </div>
@@ -223,19 +154,14 @@ function SubmitAssignmentComponent({
   classId
 }) {
   const [submissionFile, setSubmissionFile] = useState(null);
-  // console.log("----Selected Assignment---")
-  // console.log(selectedAssignment)
+
   const handleFile = (e) => setSubmissionFile(e.target.files[0]);
 
-  const handleFileSubmission = async function () {
+  const handleFileSubmission = async () => {
     const userData = JSON.parse(localStorage.getItem("userInfo"));
-    let isLate = false;
     const deadline = new Date(selectedAssignment.deadline);
-    const currentTimestamp = new Date();
-    if(currentTimestamp > deadline){
-      isLate = true;
-    }
-    
+    const isLate = new Date() > deadline;
+
     const formData = new FormData();
     formData.append("class_id", classId);
     formData.append("assignment_id", selectedAssignment.assignment_id);
@@ -256,37 +182,34 @@ function SubmitAssignmentComponent({
           },
         }
       );
-      console.log("----RESPONSE----")
-      console.log(response.data)
-      toast.success(response.data.msg)
+      toast.success(response.data.msg);
     } catch (err) {
       toast.error("Failed to upload assignment");
     }
   };
 
   return (
-    <div>
-      <div className="flex justify-center">
-        <b className="mb-10 text-lg">
-          Submit Assignment
-        </b>
-      
-        <span
-        style={{position : "fixed", right:"3%", top:"2%"}}
+    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+      <div className="flex justify-between items-center mb-4">
+        <b className="text-lg">Submit Assignment</b>
+        <button
           onClick={() => SetSubmitOverlayVisible(false)}
-          className="cursor-pointer border-2 mb-4 px-3 py-1 text-sm rounded-full"
+          className="text-gray-500 hover:text-gray-700"
         >
           X
-        </span>
+        </button>
       </div>
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col space-y-4">
         <input
           type="file"
           accept=".pdf"
           onChange={handleFile}
           className="px-4 py-2 border border-gray-300 rounded-lg"
         />
-        <button onClick={handleFileSubmission} className="px-4 py-2 rounded-md bg-green-400 text-gray-800">
+        <button
+          onClick={handleFileSubmission}
+          className="w-full px-4 py-2 rounded-md bg-green-500 text-white hover:bg-green-600 transition"
+        >
           Submit
         </button>
       </div>
