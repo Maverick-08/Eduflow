@@ -1,100 +1,115 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const NewRoute = () => {
   const location = useLocation();
-  const state = location.state?.someData || 'No State Provided'; // Fallback if state is undefined
+  const path = location.pathname.split("/");
+  const assignmentId = path[path.length - 1];
+  const classId = path[path.length - 2];
+  console.log("---location--");
+  console.log(classId, assignmentId);
 
-  // Sample data with PDF links, submission status, and submission date
-  const [studentsData, setStudentsData] = useState([
-    {
-      name: 'John Doe',
-      assignmentSubmitted: true,
-      grade: 90,
-      pdfUrl: 'https://example.com/assignments/john-doe-assignment.pdf',
-      submissionDate: '2024-04-10', // Date of submission
-      dueDate: '2024-04-08', // Assignment due date
-    },
-    {
-      name: 'Jane Smith',
-      assignmentSubmitted: false,
-      grade: 75,
-      pdfUrl: 'https://example.com/assignments/jane-smith-assignment.pdf',
-      submissionDate: null,
-      dueDate: '2024-04-08',
-    },
-    {
-      name: 'Tom Hanks',
-      assignmentSubmitted: true,
-      grade: 95,
-      pdfUrl: 'https://example.com/assignments/tom-hanks-assignment.pdf',
-      submissionDate: '2024-04-09',
-      dueDate: '2024-04-08',
-    },
-    {
-      name: 'Emily Brown',
-      assignmentSubmitted: false,
-      grade: 60,
-      pdfUrl: 'https://example.com/assignments/emily-brown-assignment.pdf',
-      submissionDate: null,
-      dueDate: '2024-04-08',
-    },
-    {
-      name: 'Mark Lee',
-      assignmentSubmitted: true,
-      grade: 85,
-      pdfUrl: 'https://example.com/assignments/mark-lee-assignment.pdf',
-      submissionDate: '2024-04-07',
-      dueDate: '2024-04-08',
-    },
-  ]);
+  const [studentsData, setStudentsData] = useState([]);
+  const [grade, setGrade] = useState(null);
+  const [scholarId, setScholarId] = useState(null);
 
-  // Function to handle grade input change (no longer needed, as grading column is removed)
-  // const handleGradeChange = (index, newGrade) => {
-  //   const updatedData = [...studentsData];
-  //   updatedData[index].grade = newGrade;
-  //   setStudentsData(updatedData);
-  // };
+  useEffect(() => {
+    const getStudentsData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/viewSubmissions/${classId}/${assignmentId}`
+        );
+
+        // console.log(response.data.data)
+        setStudentsData(response.data.data ?? []);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getStudentsData();
+  }, []);
 
   // Function to determine the assignment status symbol
-  const getAssignmentStatusSymbol = (submissionDate, dueDate) => {
-    if (!submissionDate) {
-      return '❌'; // Not Submitted (red cross)
+  const getAssignmentStatusSymbol = (submitted, isLate) => {
+    if (!submitted) {
+      return "❌"; // Not Submitted (red cross)
     }
 
-    const submission = new Date(submissionDate);
-    const due = new Date(dueDate);
-
-    if (submission > due) {
-      return '🕒'; // Late Submitted (clock symbol)
+    if (submitted && isLate) {
+      return "🕒"; // Late Submitted (clock symbol)
     }
 
-    return '✔'; // Submitted (checkmark)
+    return "✔"; // Submitted (checkmark)
   };
+
+  useEffect(()=>{
+    const submitGrade = async () => {
+      try {
+        const payload = { assignmentId, scholarId, grade };
+  
+        if (isNaN(grade) || grade < 0) {
+          toast.error("Negative grade is not allowed");
+          return;
+        }
+  
+        await axios.post("http://localhost:3000/viewSubmissions/grade", payload, {
+          withCredentials: true,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    submitGrade();
+  },[grade])
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold text-center mb-6">{state}</h1>
+      <h1 className="text-2xl font-bold text-center mb-6">
+        Student Submissions
+      </h1>
+      <ToastContainer />
 
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto border-collapse border border-gray-200">
           <thead>
             <tr className="bg-gray-100">
-              <th className="py-2 px-4 border-b text-center text-gray-700">Name</th>
-              <th className="py-2 px-4 border-b text-center text-gray-700">Submitted Assignment</th>
-              <th className="py-2 px-4 border-b text-center text-gray-700">Assignment Status</th>
+              <th className="py-2 px-4 border-b text-center text-gray-700">
+                Scholar Id
+              </th>
+              <th className="py-2 px-4 border-b text-center text-gray-700">
+                Name
+              </th>
+              <th className="py-2 px-4 border-b text-center text-gray-700">
+                Submitted Assignment
+              </th>
+              <th className="py-2 px-4 border-b text-center text-gray-700">
+                Assignment Status
+              </th>
+              <th className="py-2 px-4 border-b text-center text-gray-700">
+                Grade
+              </th>
             </tr>
           </thead>
           <tbody>
             {studentsData.map((student, index) => (
               <tr key={index} className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b text-center text-gray-800">{student.name}</td>
+                <td className="py-2 px-4 border-b text-center text-gray-800">
+                  {student.scholarId}
+                </td>
+
+                <td className="py-2 px-4 border-b text-center text-gray-800">
+                  {student.name}
+                </td>
 
                 {/* Submitted Assignment PDF link */}
                 <td className="py-2 px-4 border-b text-center">
-                  {student.assignmentSubmitted ? (
+                  {student.submitted ? (
                     <a
-                      href={student.pdfUrl}
+                      href={`http://localhost:3000/uploads/submission/${student.scholarId}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:underline"
@@ -108,7 +123,17 @@ const NewRoute = () => {
 
                 {/* Assignment status symbol */}
                 <td className="py-2 px-4 border-b text-center text-gray-800">
-                  {getAssignmentStatusSymbol(student.submissionDate, student.dueDate)}
+                  {getAssignmentStatusSymbol(student.submitted, student.isLate)}
+                </td>
+                <td className="flex justify-center items-center">
+                  <input
+                    type="number"
+                    className="text-center py-2"
+                    onChange={(e) => {
+                      setScholarId(student.scholarId)
+                      setGrade(e.target.value); 
+                    }}
+                  />
                 </td>
               </tr>
             ))}
@@ -120,3 +145,7 @@ const NewRoute = () => {
 };
 
 export default NewRoute;
+
+// C:\Vivek\Coding\Projects\Eduflow\server\uploads\submissions\cover_letter.pdf
+// server\uploads\submissions\cover_letter.pdf
+// ../../../../../../server/uploads/submissions/cover_letter.pdf

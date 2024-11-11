@@ -1,37 +1,60 @@
 import Client from "../config/dbConn.js";
+import responseCode from "../config/responseCode.js";
 
 export const showListofSubmissionsHandler = async (req, res) => {
   try {
-    const { assignment_id } = req.params;
+    const { classId,assignmentId } = req.params;
     
-
-    const assignmentQuery = `
-      SELECT deadline 
-      FROM assignment 
-      WHERE assignment_id = $1
-    `;
-    const assignmentResult = await Client.query(assignmentQuery, [assignment_id]);
     
-    if (assignmentResult.rows.length === 0) {
-      return res.status(404).json({ msg: "Assignment not found" });
+    if(!classId && !assignmentId){
+      return res.status(responseCode.badRequest).json({msg:"Class Id or Assignment Id is missing !"})
     }
 
-    const deadline = assignmentResult.rows[0].deadline;
+    // Fetch the list of all the students in the class
+    let response =  await Client.query(
+      "SELECT * FROM student WHERE $1 = ANY(class_id)",
+      [classId]
+    )
+    
+    const studentsList = response.rows; 
 
-    const submissionsQuery = `
-      SELECT CONCAT(fname, ' ', lname) AS name, 
-             CASE 
-               WHEN submission_time > $1 THEN 'Yes' 
-               ELSE 'No' 
-             END AS isLate
-      FROM submission
-      WHERE assignment_id = $2
-    `;
-    const submissionsResult = await Client.query(submissionsQuery, [deadline, assignment_id]);
+    response = await Client.query(
+      "SELECT * FROM submission WHERE class_id = $1 OR assignment_id = $2",
+      [classId, assignmentId]
+    );
 
-    return res.status(200).json({
-      submissions: submissionsResult.rows,
-    });
+    const submissionList = response.rows;
+
+    let submissionMap = {};
+
+    for(let i=0;i<submissionList.length;++i){
+      submissionMap[`${submissionList[i].scholar_id}`] = i;
+    }
+    
+    const data = [];
+
+    for(let i=0;i<studentsList.length;++i){
+      let studentData = { 
+        "name": studentsList[i].fname + " "+studentsList[i].lname,
+        "scholarId": studentsList[i].scholar_id,
+      }
+
+      if(studentsList[i].scholar_id in submissionMap){
+        studentData["submitted"] = true;
+        studentData["isLate"] = submissionList[submissionMap[studentsList[i].scholar_id]].islate;
+      }
+      else{
+        studentData["submitted"] = false;
+        studentData["isLate"] = null;
+      }
+
+
+      data.push(studentData);
+    }
+    
+
+    return res.json({data});
+    
   } catch (err) {
     return res.status(500).json({ msg: err.message });
   }

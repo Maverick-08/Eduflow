@@ -20,6 +20,7 @@ import getUploadedMaterial from "./routes/getUploadedMaterial.js"
 import markAttendance from "./routes/markAttendance.js"
 import fetchAttendacneByClass from "./routes/fetchAttendacneByClass.js"
 import fetchAttendanceByDate from "./routes/fetchAttendanceByDate.js"
+import getSubmissionFile from "./controllers/getSubmissionFile.js"
 
 
 
@@ -88,6 +89,8 @@ app.get('uploads/assignment/:fileName', (req, res) => {
 
   res.json(assignmentDetails);
 });
+
+app.get('/uploads/submission/:scholarId',getSubmissionFile)
 
 app.listen(3000, () => {
   console.log("Server is running 3000");

@@ -11,12 +11,15 @@ export default function ProfessorStreams() {
   const [localData  , setLocalData] = useState(JSON.parse(localStorage.getItem("userInfo")));
   const [currentSubject, setcurrentSubject] = useState((sessionStorage.getItem("currentSubject")));
   const [teacherName, setteacherName] = useState(JSON.parse(localStorage.getItem("userInfo")).fname + JSON.parse(localStorage.getItem("userInfo")).lname)
+
+  const { backEndLink } = connectJs;
+  const path = window.location.pathname;
+  const classString = path.split("/");
+  const classID = classString[classString.length - 1];
+
   useEffect(() => {
     const getStreams = async () => {
-      const { backEndLink } = connectJs;
-      const path = window.location.pathname;
-      const classString = path.split("/");
-      const classID = classString[classString.length - 1];
+      
       try {
         let response = await axios.get(`${backEndLink}/uploadedAssignment/${classID}`, {
           withCredentials: true
@@ -81,12 +84,12 @@ export default function ProfessorStreams() {
               <div className="flex items-center mb-2">
                 <i className="fas fa-file-alt text-blue-600"></i>
                 <p onClick={() => {
-                  navigate('/new-route', { state: { someData: assignment.stateData } });
+                  navigate(`/new-route/${classID}/${assignment.assignment_id}`, { state: { someData: assignment.stateData } });
                 }} className="ml-2 font-bold">Professor {teacherName} posted assignment : {assignment.title}</p>
               </div>
               <p className="text-gray-500">Deadline <b>{formatDateToReadable(assignment.deadline)}</b></p>
               <p className="text-gray-500">Instructions <b>{assignment.instruction}</b></p>
-              <button onClick={handleDownload}><i class=" text-green-500 fa-solid fa-download"></i> Download </button>
+              <button onClick={handleDownload}><i className=" text-green-500 fa-solid fa-download"></i> Download </button>
             </div>
           ))}
         </main>

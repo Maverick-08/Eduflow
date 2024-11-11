@@ -20,7 +20,7 @@ function App() {
           <Route path="/signup/student" element={<Student />} />
           <Route path="/StudentView/*" element={<StudentStore />} />
           <Route path="/ProfessorView/*" element={<ProfessorStore />} />
-          <Route path="/new-route/" element={<NewRoute/>}/>
+          <Route path="/new-route/*" element={<NewRoute/>}/>
         </Routes>
       </BrowserRouter>
     </>
