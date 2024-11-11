@@ -16,15 +16,21 @@ export default function Streams() {
     const getStreams = async () => {
       const { backEndLink } = connectJs;
       const path = window.location.pathname;
-      const classID = path.split("/").pop();
+      const classId = path.split("/").pop();
+
+      const scholarId = JSON.parse(localStorage.getItem("userInfo")).scholar_id;
+
+      const payload = { classId, scholarId };
+
       try {
-        let response = await axios.get(
-          `${backEndLink}/uploadedAssignment/${classID}`,
+        let response = await axios.post(
+          `${backEndLink}/uploadedAssignment`,
+          payload,
           {
             withCredentials: true,
           }
         );
-        setStream(response.data.data); 
+        setStream(response.data.data);
       } catch (error) {
         console.log(error);
       }
@@ -39,7 +45,7 @@ export default function Streams() {
       const classID = path.split("/").pop();
       try {
         let response = await axios.post(
-          `${backEndLink}/getUploadedMaterial`,
+          `${backEndLink}/getUploadedMaterial/`,
           {
             class_id: classID,
           },
@@ -75,8 +81,12 @@ export default function Streams() {
         <ToastContainer />
         <div className="bg-blue-600 rounded-lg text-white p-6 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">{studentClassInfo.subject_name}</h1>
-            <p className="text-lg">Professor {studentClassInfo.professor_name}</p>
+            <h1 className="text-2xl font-bold">
+              {studentClassInfo.subject_name}
+            </h1>
+            <p className="text-lg">
+              Professor {studentClassInfo.professor_name}
+            </p>
           </div>
           <i className="text-6xl bg-white p-3 rounded-full text-blue-500 fa-brands fa-google-scholar"></i>
         </div>
@@ -91,10 +101,18 @@ export default function Streams() {
                 <div className="flex items-start space-x-3">
                   <i className="fas fa-file-alt text-blue-700 mt-1"></i>
                   <div className="flex-grow">
-                    <p className="font-medium">New Assignment: {assignment.title}</p>
-                    <p className="text-sm text-blue-700">Deadline: {formatDateToReadable(assignment.deadline)}</p>
-                    <p className="text-sm text-blue-700">Grade: {assignment.grade}</p>
-                    <p className="text-sm text-blue-700">Instructions: {assignment.instruction}</p>
+                    <p className="font-medium">
+                      New Assignment: {assignment.title}
+                    </p>
+                    <p className="text-sm text-blue-700">
+                      Deadline: {formatDateToReadable(assignment.deadline)}
+                    </p>
+                    <p className="text-sm text-blue-700">
+                      Grade: {assignment.totalGrade}
+                    </p>
+                    <p className="text-sm text-blue-700">
+                      Instructions: {assignment.instruction}
+                    </p>
                   </div>
                   {assignment.documentUrl && (
                     <a
@@ -115,8 +133,12 @@ export default function Streams() {
                 <div className="flex items-start space-x-3">
                   <i className="fas fa-file-alt text-blue-700 mt-1"></i>
                   <div className="flex-grow">
-                    <p className="font-medium">New Material: {material.title}</p>
-                    <p className="text-sm text-blue-700">Instructions: {material.instruction}</p>
+                    <p className="font-medium">
+                      New Material: {material.title}
+                    </p>
+                    <p className="text-sm text-blue-700">
+                      Instructions: {material.instruction}
+                    </p>
                   </div>
                   {material.documentUrl && (
                     <a
@@ -151,7 +173,7 @@ export default function Streams() {
 function SubmitAssignmentComponent({
   SetSubmitOverlayVisible,
   selectedAssignment,
-  classId
+  classId,
 }) {
   const [submissionFile, setSubmissionFile] = useState(null);
 

@@ -15,8 +15,8 @@ export default function StudentStore() {
             <div style={{ width: "100%" }} >
                 <Routes>
                     <Route path="/" element={<StudentDashBoard />} />
-                    <Route path="/studentTasks*" element={<StudentTask />} />
-                    <Route path="/studentAttendance*" element={<StudentAttendance/>}/>
+                    <Route path="/studentTasks/*" element={<StudentTask />} />
+                    <Route path="/studentAttendance/*" element={<StudentAttendance/>}/>
                 </Routes>
             </div>
         </div>

@@ -5,7 +5,7 @@ import { getUploadedAssignmentController } from "../controllers/getUploadedAssig
 
 const router = Router();
 
-router.get("/:class_id" , getUploadedAssignmentController);
+router.post("/" , getUploadedAssignmentController);
 
 export default router;
   

@@ -16,12 +16,18 @@ export default function ProfessorStreams() {
   const path = window.location.pathname;
   const classString = path.split("/");
   const classID = classString[classString.length - 1];
+  const scholarId = "0";
+
+  const payload = {classId:classID,scholarId};
 
   useEffect(() => {
     const getStreams = async () => {
 
       try {
-        let response = await axios.get(`${backEndLink}/uploadedAssignment/${classID}`, {
+        let response = await axios.post(
+          `${backEndLink}/uploadedAssignment`,
+          payload,
+          {
           withCredentials: true
         })
         setStream(response.data.data);

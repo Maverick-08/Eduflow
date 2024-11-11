@@ -3,40 +3,63 @@ import path from "path"
 
 export const getUploadedAssignmentController=async(req,res)=>{
     try {
-      const { class_id } = req.params; 
-      // console.log("->>>>>>>>>>>>>>>>>>", class_id)
+      const { classId, scholarId } = req.body; 
+      // console.log("->>>>>>>>>>>>>>>>>>", classId)
   
-      if (!class_id) {
-        return res.status(400).json({ msg: "class_id is required" });
+      if (!classId) {
+        return res.status(400).json({ msg: "classId is required" });
+      }
+
+      if (!scholarId) {
+        return res.status(400).json({ msg: "scholarId is required" });
       }
   
       const result = await Client.query(
         "SELECT * FROM assignment WHERE class_id = $1", 
-        [class_id]
+        [classId]
       );
-  
+      
       if (result.rows.length === 0) {
         return res.status(404).json({ msg: "No assignments found for this class." });
       }
-  
-      // Generate the base URL for the uploaded files (assuming your app is hosted on a server)
+
+      const response = await Client.query("SELECT * FROM submission WHERE class_id = $1 AND scholar_id = $2",[classId,scholarId]);
+
+      const assignmentSubmittedDetails = response.rows
+
+      const data = [];
+
       const baseUrl = `${req.protocol}://${req.get('host')}/uploads/assignments/`;
+
+      for(let i=0;i<result.rows.length;++i){
+        let assignment = result.rows[i];
+        const obj = {
+          "assignment_id":assignment.assignment_id,
+          "classId":classId,
+          "documentUrl": baseUrl + path.basename(assignment.documentfile),
+          "deadline": assignment.deadline,
+          "title": assignment.title,
+          "instruction": assignment.instruction,
+          "totalGrade": assignment.grade,
+          "submitted":false,
+          "receivedGrade":null
+        };
+
+        for(let j=0;j<assignmentSubmittedDetails.length;++j){
+          let submission = assignmentSubmittedDetails[j];
+
+          if(assignment.assignment_id == submission.assignment_id){
+            obj["submitted"] = true,
+            obj["receivedGrade"] = submission.grade
+          }
+
+        }
+
+        data.push(obj);
+      }
   
-      // Format the response with the full file URL for each assignment
-      const assignments = result.rows.map((assignment) => ({
-        assignment_id: assignment.assignment_id,
-        documentUrl: baseUrl + path.basename(assignment.documentfile), // Use `basename` to extract filename
-        class_id: assignment.class_id,
-        deadline: assignment.deadline,
-        title: assignment.title,
-        instruction: assignment.instruction,
-        grade: assignment.grade, // Include grade in the response
-      }));
-  
-      return res.status(200).json({
-        msg: "Assignments retrieved successfully",
-        data: assignments,
-      });
+      return res.status(200).json({data});
+
     } catch (err) {
       console.error(err);
       return res.status(500).json({ msg: err.message });
