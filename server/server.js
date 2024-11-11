@@ -22,7 +22,7 @@ import fetchAttendacneByClass from "./routes/fetchAttendacneByClass.js"
 import fetchAttendanceByDate from "./routes/fetchAttendanceByDate.js"
 import getSubmissionFile from "./controllers/getSubmissionFile.js"
 import getAssignmentDetails from "./routes/assignmentDetails.js"
-
+import deleteAssignment from './routes/deleteAssignment.js'
 
 
 import path from 'path';
@@ -58,7 +58,7 @@ app.use("/uploadMaterial", uploadMaterial);
 app.use("/uploadedAssignment", getUploadedAssignment)
 app.use("/getUploadedMaterial", getUploadedMaterial)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-  
+
 app.use("/getPeople", fetchStudents);
 
 app.use("/submitAssignment", submitAssignment)
@@ -70,7 +70,9 @@ app.use("/leaveClassroom", leaveClassroom)
 app.use("/markAttendance", markAttendance)
 app.use("/fetchAttendacneByClass", fetchAttendacneByClass)
 app.use("/fetchAttendanceByDate", fetchAttendanceByDate)
-app.use("/assignmentDetails",getAssignmentDetails)
+app.use("/assignmentDetails", getAssignmentDetails)
+
+app.use("/deleteAssignment", deleteAssignment)
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -92,7 +94,7 @@ app.get('uploads/assignment/:fileName', (req, res) => {
   res.json(assignmentDetails);
 });
 
-app.get('/uploads/submission/:scholarId',getSubmissionFile)
+app.get('/uploads/submission/:scholarId', getSubmissionFile)
 
 app.listen(3000, () => {
   console.log("Server is running 3000");
