@@ -1,25 +1,33 @@
-import path from 'path'
-
+import { log } from "console";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const submittedFile = (req, res) => {
-    try{
-        const {scholarId} = req.params;
+  try {
+    const { scholarId } = req.params;
 
-        if(!scholarId){
-            return res.json({msg:"Missing scholar id"})
-        }
-        const dirname = import.meta.url.slice(8,48)
-        console.log("DIRNAME : "+ dirname);
-
-
-        // console.log(path.join(dirname, 'uploads', 'submissions', scholarId));
-
-        res.sendFile(path.join(dirname, 'uploads', 'submissions', scholarId) + '.pdf');
-        // res.json({msg:"okay"})
+    if (!scholarId) {
+      return res.json({ msg: "Missing scholar id" });
     }
-    catch(err){
-        console.log("@getSubmissionFile\n"+err);
-    }
-}
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+
+    const serverDir = __dirname.slice(
+      0,
+      __dirname.indexOf("server") + "server".length
+    );
+
+    console.log(serverDir);
+
+    // console.log(path.join(dirname, 'uploads', 'submissions', scholarId));
+
+    res.sendFile(
+      path.join(serverDir, "uploads", "submissions", scholarId) + ".pdf"
+    );
+    // res.json({msg:"okay"})
+  } catch (err) {
+    console.log("@getSubmissionFile\n" + err);
+  }
+};
 
 export default submittedFile;
