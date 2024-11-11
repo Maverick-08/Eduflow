@@ -19,6 +19,9 @@ export default function StudentNavbar() {
 
                     <i onClick={() => { navigate("/StudentView/StudentAttendance") }}
                         className="fa-solid fa-calendar text-xl mb-6 cursor-pointer"></i>
+
+                    <i onClick={() => { navigate("/StudentView/StudentAttendance") }}
+                        className="fa-solid fa-calendar text-xl mb-6 cursor-pointer"></i>
                 </div>
             </aside>
         </>

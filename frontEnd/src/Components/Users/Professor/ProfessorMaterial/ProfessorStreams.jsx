@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import connectJs from '../../../../connect';
-import { toast, ToastContainer} from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 export default function ProfessorStreams() {
   const navigate = useNavigate();
 
@@ -71,11 +71,6 @@ export default function ProfessorStreams() {
   };
 
 
-  const handleEdit = (assignmentId) => {
-    console.log(`Edit assignment with ID: ${assignmentId}`);
-    // Add edit functionality here
-  };
-
   const handleDelete = async (assignmentId) => {
     try {
       // Call the delete API
@@ -84,7 +79,7 @@ export default function ProfessorStreams() {
       });
 
       // Alert success
-      toast('Assignment deleted successfully!', {autoClose:1500});
+      toast('Assignment deleted successfully!', { autoClose: 1500 });
 
       // Update the stream state to remove the deleted assignment
       setStream(streams.filter(assignment => assignment.assignment_id !== assignmentId));
@@ -110,7 +105,7 @@ export default function ProfessorStreams() {
       </header>
 
       <div className="flex p-6">
-        <ToastContainer/>
+        <ToastContainer />
         <main className="w-full">
           {streams.map((assignment, index) => (
             <div
@@ -129,10 +124,7 @@ export default function ProfessorStreams() {
                 <button className='mr-4' onClick={() => handleDownload(assignment.documentUrl)}>
                   <i className="text-green-500 fa-solid fa-download"></i> Download
                 </button>
-                <button onClick={() => handleEdit(assignment.assignment_id)} className="flex items-center text-blue-500 mr-4">
-                  <i className="fa-solid fa-edit"></i>
-                  <span className="ml-1">Edit</span>
-                </button>
+
                 <button onClick={() => handleDelete(assignment.assignment_id)} className="flex items-center text-red-500">
                   <i className="fa-solid fa-trash-alt"></i>
                   <span className="ml-1">Delete</span>

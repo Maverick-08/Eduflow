@@ -23,6 +23,8 @@ import fetchAttendanceByDate from "./routes/fetchAttendanceByDate.js"
 import getSubmissionFile from "./controllers/getSubmissionFile.js"
 import getAssignmentDetails from "./routes/assignmentDetails.js"
 import deleteAssignment from './routes/deleteAssignment.js'
+import uploadTimetable from './routes/uploadTimetable.js'
+import getTimetable from "./routes/getTimetable.js";
 
 
 import path from 'path';
@@ -71,6 +73,9 @@ app.use("/markAttendance", markAttendance)
 app.use("/fetchAttendacneByClass", fetchAttendacneByClass)
 app.use("/fetchAttendanceByDate", fetchAttendanceByDate)
 app.use("/assignmentDetails", getAssignmentDetails)
+app.use("/uploadTimetable", uploadTimetable)
+// app.use("/getTimetable", getTimetable)
+
 
 app.use("/deleteAssignment", deleteAssignment)
 
