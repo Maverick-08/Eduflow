@@ -185,7 +185,7 @@ export default function Streams() {
               <div
                 style={{
                   position: "fixed",
-                  top: `450px`,
+                  top: "20%",
                   left: "50%",
                   transform: "translateX(-50%)",
                   zIndex: 10,
@@ -266,10 +266,15 @@ function SubmitAssignmentComponent({
 
   return (
     <div>
-      <div className="flex justify-end">
+      <div className="flex justify-center">
+        <b className="mb-10 text-lg">
+          Submit Assignment
+        </b>
+      
         <span
+        style={{position : "fixed", right:"3%", top:"2%"}}
           onClick={() => SetSubmitOverlayVisible(false)}
-          className="cursor-pointer border-2 mb-4 px-3 py-1 rounded-full"
+          className="cursor-pointer border-2 mb-4 px-3 py-1 text-sm rounded-full"
         >
           X
         </span>
