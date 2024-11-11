@@ -114,16 +114,40 @@ export default function Streams() {
                       Instructions: {assignment.instruction}
                     </p>
                   </div>
-                  {assignment.documentUrl && (
-                    <a
-                      href={assignment.documentUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-700 ml-auto"
-                    >
-                      View Document
-                    </a>
-                  )}
+                  <div className="text-right">
+                    {assignment.documentUrl && (
+                      <a
+                        href={assignment.documentUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-700 block"
+                      >
+                        View Document
+                      </a>
+                    )}
+                    <p className="text-md text-blue-700 mt-2">
+                      Status :{" "}
+                      <span
+                        className={`${
+                          assignment.submitted
+                            ? "text-green-500"
+                            : "text-red-500"
+                        }`}
+                      >
+                        {assignment.submitted ? "Submitted" : "Not Submitted"}
+                      </span>
+                    </p>
+                    {assignment.totalGrade !== "Ungraded" && (
+                      <p className="text-md text-blue-700">
+                        Assigned Grade :{" "}
+                        <span>
+                          {assignment.receivedGrade === null
+                            ? "Not Checked"
+                            : assignment.receivedGrade}
+                        </span>
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
