@@ -4,6 +4,7 @@ import StudentNavbar from './StudentNavbar';
 import StudentDashBoard from './StudentDashBoard';
 import StudentTask from './StudentTask';
 import StudentAttendance from './StudentAttendance';
+import TimeTable from './TimeTable';
 
 export default function StudentStore() {
     return (
@@ -17,6 +18,7 @@ export default function StudentStore() {
                     <Route path="/" element={<StudentDashBoard />} />
                     <Route path="/studentTasks/*" element={<StudentTask />} />
                     <Route path="/studentAttendance/*" element={<StudentAttendance/>}/>
+                    <Route path="/timeTable/*" element={<TimeTable/>}/>
                 </Routes>
             </div>
         </div>

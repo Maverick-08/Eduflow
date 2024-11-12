@@ -6,22 +6,18 @@ export default function StudentNavbar() {
 
     return (
         <>
-            <aside style={{ height: "100%" }} className="w-16 bg-white h-screen shadow-md">
+            <aside style={{ height: "100vh" }} className="w-16 bg-white h-screen shadow-md">
                 <div className="flex flex-col items-center py-4">
                     <i
                         onClick={() => { navigate("/StudentView") }}
-                        className="fas fa-home text-xl mb-6 cursor-pointer"
+                        className="fas fa-home text-blue-600 text-xl mb-6 cursor-pointer"
                     ></i>
-                    {/* <i
-                        onClick={() => { navigate("/StudentView") }}
-                        className="fas fa-home text-xl mb-6 cursor-pointer"
-                    ></i> */}
 
                     <i onClick={() => { navigate("/StudentView/StudentAttendance") }}
-                        className="fa-solid fa-calendar text-xl mb-6 cursor-pointer"></i>
+                        className="fa-solid fa-calendar text-orange-600 text-xl mb-6 cursor-pointer"></i>
 
-                    <i onClick={() => { navigate("/StudentView/StudentAttendance") }}
-                        className="fa-solid fa-calendar text-xl mb-6 cursor-pointer"></i>
+                    <i onClick={() => { navigate("/StudentView/timeTable") }}
+                        className="fa-solid fa-clock text-green-600 text-xl mb-6 cursor-pointer"></i>
                 </div>
             </aside>
         </>
