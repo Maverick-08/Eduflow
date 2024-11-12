@@ -25,6 +25,7 @@ import getAssignmentDetails from "./routes/assignmentDetails.js"
 import deleteAssignment from './routes/deleteAssignment.js'
 import uploadTimetable from './routes/uploadTimetable.js'
 import getTimetable from "./routes/getTimetable.js";
+import analytics from "./routes/analytics.js";
 
 
 import path from 'path';
@@ -75,6 +76,7 @@ app.use("/fetchAttendanceByDate", fetchAttendanceByDate)
 app.use("/assignmentDetails", getAssignmentDetails)
 app.use("/uploadTimetable", uploadTimetable)
 // app.use("/getTimetable", getTimetable)
+app.use("/analytics",analytics);
 
 
 app.use("/deleteAssignment", deleteAssignment)
