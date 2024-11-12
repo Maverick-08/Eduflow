@@ -81,6 +81,7 @@ export default function AttendancePage() {
     const classString = path.split("/");
     const class_id = classString[classString.length - 1];
     const attendance_date = e.target.value;
+    console.log("opo  :: " , attendance_date)
     setSelectedDate(attendance_date);
     const { backEndLink } = connectJs;
     try {
@@ -107,6 +108,44 @@ export default function AttendancePage() {
       setStudents([]);
     }
   };
+
+  const getAttendancei = async () => {
+    const path = window.location.pathname;
+    const classString = path.split("/");
+    const class_id = classString[classString.length - 1];
+    let attendance_date = new Date();
+    attendance_date = attendance_date.toISOString().slice(0, 10);
+    console.log(attendance_date);
+    setSelectedDate(attendance_date);
+    const { backEndLink } = connectJs;
+    try {
+      const response = await axios.post(
+        `${backEndLink}/fetchAttendanceByDate`,
+        { class_id, attendance_date },
+        { withCredentials: true }
+      );
+      console.log(response);
+      const updatedStudents = response.data.attendance;
+      // const updatedStudents = response.data.attendance.sort((a, b) =>
+      //   a.name.localeCompare(b.name)
+      // );
+      setStudents(updatedStudents);
+
+      const updatedAttendance = updatedStudents.reduce((acc, student) => ({
+        ...acc,
+        [student.scholar_id]: student.status ? "present" : "absent",
+      }), {});
+      
+      console.log(updatedAttendance);
+      setAttendance(updatedAttendance);
+    } catch (error) {
+      setStudents([]);
+    }
+  }
+  
+  useEffect(()=>{
+      getAttendancei();
+  },[])
 
   return (
     <main className="flex-1 p-6 bg-gray-50 min-h-screen">

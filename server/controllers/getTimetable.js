@@ -19,3 +19,4 @@ export const getTimetable = async (req, res) => {
         }
     });
 };
+ 

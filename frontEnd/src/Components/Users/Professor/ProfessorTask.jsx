@@ -5,6 +5,7 @@ import ProfessorAssignment from "./ProfessorMaterial/ProfessorAssignment";
 import ProfessorStudents from "./ProfessorMaterial/ProfessorStudents";
 import ProfessorStreams from "./ProfessorMaterial/ProfessorStreams";
 import AttendancePage from "./ProfessorMaterial/AttendancePage";
+import AttendenceAnalytics from "./ProfessorMaterial/AttendenceAnalytics";
 
 export default function ProfessorTask() {
   const navigate = useNavigate();
@@ -59,6 +60,13 @@ export default function ProfessorTask() {
         >
           Attendance
         </div>
+        <div
+          onClick={() => handleTabClick("attendanceAnalytics")}
+          className={`cursor-pointer ${activeTab === "attendanceAnalytics" ? "border-b-2 border-blue-600 text-blue-700" : "text-gray-500"
+            } hover:text-blue-700 transition duration-200`}
+        >
+          Analytics
+        </div>
       </nav>
 
       <Routes>
@@ -67,6 +75,7 @@ export default function ProfessorTask() {
         <Route path="/assignment/:id" element={<ProfessorAssignment />} />
         <Route path="/studentsInClass/:id" element={<ProfessorStudents />} />
         <Route path="/attendancePage/:id" element={<AttendancePage />} />
+        <Route path="/attendanceAnalytics/:id" element={<AttendenceAnalytics />} />
       </Routes>
     </div>
   );

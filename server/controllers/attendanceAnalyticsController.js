@@ -3,7 +3,7 @@ import Client from "../config/dbConn.js";
 const getAttendanceAnalytics = async (req,res) => {
     try{
         const {classId} = req.body;
-
+        console.log(classId)
         if(!classId){
             return res.json({msg:"Class id is missing !"})
         }
