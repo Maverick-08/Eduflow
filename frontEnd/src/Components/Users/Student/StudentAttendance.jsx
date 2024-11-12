@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import connectJs from '../../../connect';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const StudentAttendance = () => {
   const { backEndLink } = connectJs;
@@ -11,6 +14,7 @@ const StudentAttendance = () => {
   const [loading, setLoading] = useState(false);
   const [attendanceRecord, setAttendanceRecord] = useState([]);
   const [attendencePercentage, setattendencePercentage] = useState(0);
+
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -71,6 +75,34 @@ const StudentAttendance = () => {
     }
   };
 
+  const presentCount = attendanceRecord.filter((e) => e.status === true).length;
+  const absentCount = attendanceRecord.length - presentCount;
+
+  const data = {
+    labels: ['Present', 'Absent'],
+    datasets: [
+      {
+        label: 'Attendance Status',
+        data: [presentCount, absentCount],
+        backgroundColor: ['#4CAF50', '#FF7043'], // Green for Present, Red for Absent
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: `Attendance Distribution (${attendencePercentage}% Attendance)`,
+      },
+    },
+  };
+
   return (
     <div className="flex flex-col items-center bg-gray-50 p-6">
       <h1 className="text-4xl font-bold text-blue-600 mb-8">Student Attendance</h1>
@@ -129,6 +161,14 @@ const StudentAttendance = () => {
               </tr>
             </tbody>
           </table>
+
+          <br />
+          <center>
+            <b>Pie Chart showing attendance distribution</b>
+            <div style={{ width: '80%', maxWidth: '400px' }}>
+              <Pie data={data} options={options} />
+            </div>
+          </center>
         </div>
       )}
     </div>
