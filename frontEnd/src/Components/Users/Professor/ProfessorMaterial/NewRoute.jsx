@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import * as XLSX from "xlsx";
 
 const NewRoute = () => {
   const location = useLocation();
@@ -50,27 +51,6 @@ const NewRoute = () => {
     getStudentsData();
   }, []);
 
-  // Function to determine the assignment status symbol
-  const getAssignmentStatusSymbol = (submitted, isLate) => {
-    if (assignmentDetails.grade == "Ungraded" && submitted) {
-      return "✔";
-    }
-
-    if (assignmentDetails == "Ungraded" && !submitted) {
-      return "❌";
-    }
-
-    if (!submitted) {
-      return "❌"; // Not Submitted (red cross)
-    }
-
-    if (submitted && isLate) {
-      return "🕒"; // Late Submitted (clock symbol)
-    }
-
-    return "✔"; // Submitted (checkmark)
-  };
-
   useEffect(() => {
     const submitGrade = async () => {
       try {
@@ -95,6 +75,61 @@ const NewRoute = () => {
 
     submitGrade();
   }, [grade]);
+
+  // Function to determine the assignment status symbol
+  const getAssignmentStatusSymbol = (submitted, isLate) => {
+    if (assignmentDetails.grade == "Ungraded" && submitted) {
+      return "✔";
+    }
+
+    if (assignmentDetails == "Ungraded" && !submitted) {
+      return "❌";
+    }
+
+    if (!submitted) {
+      return "❌"; // Not Submitted (red cross)
+    }
+
+    if (submitted && isLate) {
+      return "🕒"; // Late Submitted (clock symbol)
+    }
+
+    return "✔"; // Submitted (checkmark)
+  };
+
+  const generateReport = () => {
+    console.log("---Report----")
+    console.log(studentsData);
+
+    const reportData = [];
+    studentsData.map((student) => {
+      let data = {
+        "Scholar Id": student.scholarId,
+        "Name":student.name,
+        "Status": student.submitted ? "Submitted" : "Not Submitted",
+        "Late Submission" : student.submitted ? student.isLate ? "Yes" : "No": ""
+      }
+
+      if(assignmentDetails.grade != "Ungraded"){
+        data["Grade"] = student.submitted ? student.assignedGrade == null ? "Not Checked" : student.assignedGrade : ""
+      }
+
+      reportData.push(data);
+    })
+
+    console.log(reportData);
+
+     // Step 1: Create a worksheet from the data array
+     const worksheet = XLSX.utils.json_to_sheet(reportData);
+
+     // Step 2: Create a workbook and add the worksheet
+     const workbook = XLSX.utils.book_new();
+     XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
+ 
+     // Step 3: Generate and download the Excel file
+     XLSX.writeFile(workbook, "Report.xlsx");
+
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -183,12 +218,18 @@ const NewRoute = () => {
             ))}
           </tbody>
         </table>
-        <div className="flex justify-center items-center mt-4">
+        <div className="flex justify-center items-center mt-8 gap-4">
           <button
             onClick={() => window.location.reload()}
             className="bg-green-400 rounded-lg px-16 py-4 text-white text-2xl"
           >
             Submit
+          </button>
+          <button
+            onClick={generateReport}
+            className="bg-sky-400 rounded-lg px-16 py-4 text-white text-2xl"
+          >
+            Generate Report
           </button>
         </div>
       </div>
