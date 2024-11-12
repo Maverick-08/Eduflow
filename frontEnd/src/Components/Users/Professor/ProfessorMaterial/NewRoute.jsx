@@ -31,7 +31,7 @@ const NewRoute = () => {
     };
 
     const getDetails = async () => {
-      try{
+      try {
         const response = await axios.post(
           `http://localhost:3000/assignmentDetails`,
           { assignmentId },
@@ -119,9 +119,11 @@ const NewRoute = () => {
               <th className="py-2 px-4 border-b text-center text-gray-700">
                 Assignment Status
               </th>
-              <th className="py-2 px-4 border-b text-center text-gray-700">
-                Grade
-              </th>
+              {assignmentDetails?.grade != "Ungraded" && (
+                <th className="py-2 px-4 border-b text-center text-gray-700">
+                  Grade
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -155,32 +157,39 @@ const NewRoute = () => {
                 <td className="py-2 px-4 border-b text-center text-gray-800">
                   {getAssignmentStatusSymbol(student.submitted, student.isLate)}
                 </td>
-                <td className="flex justify-center border-b items-center py-2">
-                  {student.assignedGrade ? (
-                    <p className="text-xl text-gray-400">
-                      {student.assignedGrade}
-                    </p>
-                  ) : (
-                    <input
-                      type="number"
-                      className={`text-center py-1 border-2 border-gray-400 ${
-                        student.submitted ? "" : "cursor-not-allowed"
-                      }`}
-                      onChange={(e) => {
-                        if (student.submitted) {
-                          setScholarId(student.scholarId);
-                          setGrade(e.target.value);
-                        }
-                      }}
-                    />
-                  )}
-                </td>
+                {assignmentDetails?.grade != "Ungraded" && (
+                  <td className="flex justify-center border-b items-center py-2">
+                    {student.assignedGrade ? (
+                      <p className="text-xl text-gray-400">
+                        {student.assignedGrade}
+                      </p>
+                    ) : (
+                      <input
+                        type="number"
+                        className={`text-center py-1 border-2 border-gray-400 ${
+                          student.submitted ? "" : "cursor-not-allowed"
+                        }`}
+                        onChange={(e) => {
+                          if (student.submitted) {
+                            setScholarId(student.scholarId);
+                            setGrade(e.target.value);
+                          }
+                        }}
+                      />
+                    )}
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
         </table>
         <div className="flex justify-center items-center mt-4">
-          <button onClick={()=> window.location.reload()} className="bg-green-400 rounded-lg px-16 py-4 text-white text-2xl">Submit</button>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-green-400 rounded-lg px-16 py-4 text-white text-2xl"
+          >
+            Submit
+          </button>
         </div>
       </div>
     </div>
