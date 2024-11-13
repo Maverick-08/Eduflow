@@ -18,7 +18,9 @@ export default function ProfessorStreams() {
   const classID = classString[classString.length - 1];
   const scholarId = "0";
 
-  const payload = {classId:classID,scholarId};
+  const payload = { classId: classID, scholarId };
+
+  const [material, setMaterial] = useState([]);
 
   useEffect(() => {
     const getStreams = async () => {
@@ -28,9 +30,29 @@ export default function ProfessorStreams() {
           `${backEndLink}/uploadedAssignment`,
           payload,
           {
-          withCredentials: true
-        })
+            withCredentials: true
+          })
         setStream(response.data.data);
+      }
+      catch (error) {
+        console.log(error);
+      }
+    }
+    getStreams();
+  }, [])
+  useEffect(() => {
+    const getStreams = async () => {
+      let class_id = classID
+      try {
+        let response = await axios.post(
+          `${backEndLink}/getUploadedMaterial`,{
+            class_id
+          },
+          {
+            withCredentials: true
+          })
+        setMaterial(response.data.data);
+        console.log(response.data.data);
       }
       catch (error) {
         console.log(error);
@@ -106,11 +128,11 @@ export default function ProfessorStreams() {
           <p className="text-lg">Professor {teacherName}</p>
         </div>
         <div>
-          <i style={{ fontSize: "60px" }} class=" bg-white p-3 rounded-full text-blue-500 fa-brands fa-google-scholar"></i>
+          <i style={{ fontSize: "60px" }} class=" bg-white p-3 text-green-400 rounded-full text-blue-500 fa-brands fa-google-scholar"></i>
         </div>
       </header>
 
-      <div className="flex p-6">
+      <div style={{flexDirection : "column"}} className="flex p-6 ">
         <ToastContainer />
         <main className="w-full">
           {streams.map((assignment, index) => (
@@ -124,11 +146,39 @@ export default function ProfessorStreams() {
                   navigate(`/new-route/${classID}/${assignment.assignment_id}`, { state: { someData: assignment.stateData } });
                 }} className="ml-2 font-bold">New Assignment : {assignment.title}</p>
               </div>
-              <p className="text-gray-500">Deadline <b>{formatDateToReadable(assignment.deadline)}</b></p>
-              <p className="text-gray-500">Instructions <b>{assignment.instruction}</b></p>
-              <div className='flex'>
+              <p className="mt-2 text-gray-500">Deadline <b>{formatDateToReadable(assignment.deadline)}</b></p>
+              <p className="mt-2 text-gray-500">Instructions <b>{assignment.instruction}</b></p>
+              <div className='mt-2 flex'>
                 <button className='mr-4' onClick={() => handleDownload(assignment.documentUrl)}>
-                  <i className="text-green-500 fa-solid fa-download"></i> Download
+                  <i className="text-green-500 fa-solid fa-eye"></i> View
+                </button>
+
+                <button onClick={() => handleDelete(assignment.assignment_id)} className="flex items-center text-red-500">
+                  <i className="fa-solid fa-trash-alt"></i>
+                  <span className="ml-1">Delete</span>
+                </button>
+              </div>
+
+            </div>
+          ))}
+        </main>
+        <br />
+        <main>
+          {material.map((assignment, index) => (
+            <div
+              key={index}
+              className="bg-white p-4 rounded-lg shadow-md mb-4 cursor-pointer"
+            >
+              <div className="flex items-center mb-2">
+                <i className="fas fa-file-alt text-blue-600"></i>
+                <p onClick={() => {
+                  navigate(`/new-route/${classID}/${assignment.assignment_id}`, { state: { someData: assignment.stateData } });
+                }} className="ml-2 font-bold"> New Material : {assignment.title}</p>
+              </div>
+              <p style={{margin : "2px 0px"}} className="text-gray-500">Instructions <b>{assignment.instruction}</b></p>
+              <div className='mt-2 flex'>
+                <button className='mr-4' onClick={() => handleDownload(assignment.documentUrl)}>
+                  <i className="text-green-500 fa-solid fa-eye"></i> View
                 </button>
 
                 <button onClick={() => handleDelete(assignment.assignment_id)} className="flex items-center text-red-500">

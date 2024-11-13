@@ -152,7 +152,7 @@ export default function CreateAssignment({ setAssignmentVisible, setCourses }) {
                 className="mr-2"
               />
               <label className="text-gray-700">
-                Is this an individual assignment?
+                Is this an individual class?
               </label>
             </div>
 
