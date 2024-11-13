@@ -144,7 +144,7 @@ export default function AttendancePage() {
   }
   
   useEffect(()=>{
-      getAttendancei();
+      // getAttendancei();
   },[])
 
   return (

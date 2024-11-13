@@ -18,7 +18,7 @@ export default function StudentStore() {
                     <Route path="/" element={<StudentDashBoard />} />
                     <Route path="/studentTasks/*" element={<StudentTask />} />
                     <Route path="/studentAttendance/*" element={<StudentAttendance/>}/>
-                    <Route path="/timeTable/*" element={<TimeTable/>}/>
+                    {/* <Route path="/timeTable/*" element={<TimeTable/>}/> */}
                 </Routes>
             </div>
         </div>
